@@ -2,11 +2,13 @@
 
 import { ImageOff, Search } from 'lucide-react';
 import Link from 'next/link';
+import { useParams } from 'next/navigation';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { api, ApiError } from '@/lib/api/client';
 import {
   ProductCardGridSkeleton,
   ProductCardSkeleton,
+  Skeleton,
 } from '@/components/ui/skeleton';
 import type { Category, Paginated, Product } from '@/lib/api/types';
 import { excerpt, toPlainText } from '@/lib/utils/html';
@@ -26,11 +28,21 @@ const SORT_OPTIONS: ReadonlyArray<{ value: string; label: string }> = [
 ];
 
 export function CatalogView() {
+  const params = useParams();
+  const slug = typeof params.slug === 'string' ? params.slug : null;
+
   const [categories, setCategories] = useState<Category[]>([]);
-  const [categoryId, setCategoryId] = useState<string | null>(null);
+  const [categoriesLoaded, setCategoriesLoaded] = useState(false);
   const [searchInput, setSearchInput] = useState('');
   const [search, setSearch] = useState('');
   const [sort, setSort] = useState('name-asc');
+
+  const activeCategory =
+    slug !== null ? (categories.find((item) => item.slug === slug) ?? null) : null;
+  const categoryId = activeCategory?.id ?? null;
+  const slugMissing =
+    slug !== null && categoriesLoaded && activeCategory === null;
+  const ready = slug === null || categoriesLoaded;
 
   const [products, setProducts] = useState<Product[]>([]);
   const [error, setError] = useState<string | null>(null);
@@ -75,13 +87,21 @@ export function CatalogView() {
           setCategories(loaded);
         }
       })
-      .catch(() => undefined);
+      .catch(() => undefined)
+      .finally(() => {
+        if (active) {
+          setCategoriesLoaded(true);
+        }
+      });
     return () => {
       active = false;
     };
   }, []);
 
   useEffect(() => {
+    if (!ready || slugMissing) {
+      return;
+    }
     let active = true;
     loadingRef.current = true;
     // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -118,7 +138,7 @@ export function CatalogView() {
     return () => {
       active = false;
     };
-  }, [buildUrl]);
+  }, [buildUrl, ready, slugMissing]);
 
   const loadMore = useCallback((): void => {
     if (loadingRef.current || loadedCount === 0) {
@@ -167,15 +187,23 @@ export function CatalogView() {
   const hasMore = loadedCount < totalPages;
   const firstLoading = loading && loadedCount === 0;
 
-  const pillClass = (active: boolean): string =>
+  const pillClass = (isActive: boolean): string =>
     `whitespace-nowrap rounded-full border px-3 py-1 text-sm transition ${
-      active
+      isActive
         ? 'border-foreground bg-foreground text-background'
         : 'border-black/15 hover:bg-black/5 dark:border-white/20 dark:hover:bg-white/10'
     }`;
 
   return (
     <section className="flex flex-col gap-6">
+      {slug !== null && !categoriesLoaded ? (
+        <Skeleton className="h-8 w-48" />
+      ) : (
+        <h1 className="text-2xl font-semibold">
+          {activeCategory ? activeCategory.name : 'Усі товари'}
+        </h1>
+      )}
+
       <div className="flex flex-col gap-3">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
           <div className="relative flex-1">
@@ -210,27 +238,29 @@ export function CatalogView() {
           </label>
         </div>
         <div className="flex flex-wrap gap-2">
-          <button
-            type="button"
-            onClick={() => setCategoryId(null)}
-            className={pillClass(categoryId === null)}
-          >
+          <Link href="/" className={pillClass(slug === null)}>
             Усі товари
-          </button>
+          </Link>
           {categories.map((category) => (
-            <button
+            <Link
               key={category.id}
-              type="button"
-              onClick={() => setCategoryId(category.id)}
-              className={pillClass(categoryId === category.id)}
+              href={`/category/${category.slug}`}
+              className={pillClass(slug === category.slug)}
             >
               {category.name}
-            </button>
+            </Link>
           ))}
         </div>
       </div>
 
-      {error && products.length === 0 ? (
+      {slugMissing ? (
+        <p className="text-black/60 dark:text-white/60">
+          Категорію не знайдено.{' '}
+          <Link href="/" className="underline">
+            До всіх товарів
+          </Link>
+        </p>
+      ) : error && products.length === 0 ? (
         <p className="text-red-600">{error}</p>
       ) : firstLoading ? (
         <ProductCardGridSkeleton count={6} />
