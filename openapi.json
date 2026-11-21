@@ -735,7 +735,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "type": "object"
+                    "$ref": "#/components/schemas/StockBalanceView"
                   }
                 }
               }
@@ -1140,7 +1140,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "type": "object"
+                    "$ref": "#/components/schemas/DeliveryMethodView"
                   }
                 }
               }
@@ -1930,6 +1930,29 @@
           }
         }
       },
+      "StockBalanceView": {
+        "type": "object",
+        "properties": {
+          "productId": {
+            "type": "string"
+          },
+          "onHand": {
+            "type": "number"
+          },
+          "reserved": {
+            "type": "number"
+          },
+          "available": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "productId",
+          "onHand",
+          "reserved",
+          "available"
+        ]
+      },
       "AdjustStockRequestDto": {
         "type": "object",
         "properties": {
@@ -2362,6 +2385,30 @@
           "deliveryMethod",
           "deliveryFeeMinor",
           "totalMinor"
+        ]
+      },
+      "DeliveryMethodView": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "enum": [
+              "COURIER",
+              "POSTAL_SERVICE",
+              "PICKUP"
+            ]
+          },
+          "name": {
+            "type": "string"
+          },
+          "feeMinor": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "code",
+          "name",
+          "feeMinor"
         ]
       },
       "ChangeOrderStatusRequestDto": {

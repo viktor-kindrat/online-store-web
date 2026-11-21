@@ -784,6 +784,12 @@ export interface components {
             name?: string;
             slug?: string;
         };
+        StockBalanceView: {
+            productId: string;
+            onHand: number;
+            reserved: number;
+            available: number;
+        };
         AdjustStockRequestDto: {
             /** Format: uuid */
             productId: string;
@@ -889,6 +895,12 @@ export interface components {
             deliveryMethod: "COURIER" | "POSTAL_SERVICE" | "PICKUP";
             deliveryFeeMinor: number;
             totalMinor: number;
+        };
+        DeliveryMethodView: {
+            /** @enum {string} */
+            code: "COURIER" | "POSTAL_SERVICE" | "PICKUP";
+            name: string;
+            feeMinor: number;
         };
         ChangeOrderStatusRequestDto: {
             /** @enum {string} */
@@ -1511,7 +1523,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": Record<string, never>[];
+                    "application/json": components["schemas"]["StockBalanceView"][];
                 };
             };
         };
@@ -1813,7 +1825,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": Record<string, never>[];
+                    "application/json": components["schemas"]["DeliveryMethodView"][];
                 };
             };
         };
