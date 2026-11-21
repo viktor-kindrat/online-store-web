@@ -1,0 +1,54 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-ec2
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-central-1
+
+      - name: Trigger deploy via SSM
+        env:
+          INSTANCE_ID: i-0555427e894bc01a8
+          SERVICE: web
+        run: |
+          set -e
+          CMD=$(aws ssm send-command \
+            --instance-ids "$INSTANCE_ID" \
+            --document-name briffai-deploy \
+            --parameters "Service=[\"$SERVICE\"]" \
+            --query Command.CommandId --output text)
+          echo "SSM command id: $CMD"
+          STATUS=Pending
+          for _ in $(seq 1 100); do
+            STATUS=$(aws ssm get-command-invocation \
+              --command-id "$CMD" --instance-id "$INSTANCE_ID" \
+              --query Status --output text 2>/dev/null || echo Pending)
+            echo "status: $STATUS"
+            case "$STATUS" in
+              Success) break ;;
+              Failed|Cancelled|TimedOut)
+                echo "::error::Deploy ended with status $STATUS"
+                break ;;
+            esac
+            sleep 15
+          done
+          echo "---- command output ----"
+          aws ssm get-command-invocation \
+            --command-id "$CMD" --instance-id "$INSTANCE_ID" \
+            --query '{Status:Status,Output:StandardOutputContent,Error:StandardErrorContent}' \
+            --output json
+          [ "$STATUS" = "Success" ]
