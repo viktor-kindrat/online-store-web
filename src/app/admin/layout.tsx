@@ -1,5 +1,9 @@
+'use client';
+
 import Link from 'next/link';
-import type { ReactNode } from 'react';
+import { useRouter } from 'next/navigation';
+import { useEffect, type ReactNode } from 'react';
+import { useSession } from '@/features/auth/session';
 
 const ADMIN_LINKS = [
   { href: '/admin/products', label: 'Products' },
@@ -13,6 +17,23 @@ const ADMIN_LINKS = [
 export default function AdminLayout({
   children,
 }: Readonly<{ children: ReactNode }>) {
+  const router = useRouter();
+  const { user, loading } = useSession();
+
+  useEffect(() => {
+    if (!loading && (!user || user.role !== 'ADMIN')) {
+      router.replace('/');
+    }
+  }, [loading, user, router]);
+
+  if (loading) {
+    return <p className="text-black/50 dark:text-white/50">Loading…</p>;
+  }
+
+  if (!user || user.role !== 'ADMIN') {
+    return null;
+  }
+
   return (
     <div className="flex flex-col gap-8 sm:flex-row">
       <aside className="w-full shrink-0 sm:w-44">

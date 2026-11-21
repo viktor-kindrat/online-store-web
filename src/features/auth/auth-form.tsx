@@ -6,10 +6,11 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { api, ApiError } from '@/lib/api/client';
+import { useSession } from '@/features/auth/session';
 import type { UserView } from '@/lib/api/types';
 
 const credentialsSchema = z.object({
-  email: z.string().email(),
+  email: z.string().email().max(254),
   password: z.string().min(8).max(100),
 });
 
@@ -21,6 +22,7 @@ interface AuthFormProps {
 
 export function AuthForm({ mode }: AuthFormProps) {
   const router = useRouter();
+  const { refresh } = useSession();
   const [submitError, setSubmitError] = useState<string | null>(null);
   const {
     register,
@@ -32,6 +34,7 @@ export function AuthForm({ mode }: AuthFormProps) {
     setSubmitError(null);
     try {
       await api.post<UserView>(`/auth/${mode}`, values);
+      await refresh();
       router.push('/');
       router.refresh();
     } catch (error) {
@@ -54,6 +57,7 @@ export function AuthForm({ mode }: AuthFormProps) {
         <input
           type="email"
           autoComplete="email"
+          maxLength={254}
           className="rounded-md border border-black/15 px-3 py-2 dark:border-white/20"
           {...register('email')}
         />
@@ -66,6 +70,7 @@ export function AuthForm({ mode }: AuthFormProps) {
         <input
           type="password"
           autoComplete={mode === 'login' ? 'current-password' : 'new-password'}
+          maxLength={100}
           className="rounded-md border border-black/15 px-3 py-2 dark:border-white/20"
           {...register('password')}
         />
