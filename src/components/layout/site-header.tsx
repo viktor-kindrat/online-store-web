@@ -6,7 +6,6 @@ import {
   LogIn,
   LogOut,
   Shield,
-  ShoppingBag,
   ShoppingCart,
   UserPlus,
 } from 'lucide-react';
@@ -42,8 +41,9 @@ export function SiteHeader() {
           href="/"
           className="flex items-center gap-2 text-lg font-semibold"
         >
-          <ShoppingBag className="size-5" aria-hidden />
-          Online Store
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/logo.png" alt="M&amp;H" className="h-9 w-auto" />
+          <span className="sr-only">M&amp;H</span>
         </Link>
         <div className="flex flex-1 items-center gap-5 text-sm">
           <Link href="/" className="flex items-center gap-1.5 hover:underline">
