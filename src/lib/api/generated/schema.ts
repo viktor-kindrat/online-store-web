@@ -1366,6 +1366,8 @@ export interface operations {
             query?: {
                 categoryId?: string;
                 search?: string;
+                sortBy?: "name" | "price";
+                sortOrder?: "asc" | "desc";
             };
             header?: never;
             path?: never;
