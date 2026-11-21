@@ -4,14 +4,14 @@
  */
 
 export interface paths {
-    "/": {
+    "/api/v1": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["AppController_getHello"];
+        get: operations["AppController_getHello_v1"];
         put?: never;
         post?: never;
         delete?: never;
@@ -20,14 +20,14 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/health": {
+    "/api/v1/health": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["HealthController_check"];
+        get: operations["HealthController_check_v1"];
         put?: never;
         post?: never;
         delete?: never;
@@ -36,7 +36,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/auth/register": {
+    "/api/v1/auth/register": {
         parameters: {
             query?: never;
             header?: never;
@@ -45,14 +45,14 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["AuthController_register"];
+        post: operations["AuthController_register_v1"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/auth/login": {
+    "/api/v1/auth/login": {
         parameters: {
             query?: never;
             header?: never;
@@ -61,14 +61,14 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["AuthController_login"];
+        post: operations["AuthController_login_v1"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/auth/refresh": {
+    "/api/v1/auth/refresh": {
         parameters: {
             query?: never;
             header?: never;
@@ -77,14 +77,14 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["AuthController_refresh"];
+        post: operations["AuthController_refresh_v1"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/auth/logout": {
+    "/api/v1/auth/logout": {
         parameters: {
             query?: never;
             header?: never;
@@ -93,69 +93,21 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["AuthController_logout"];
+        post: operations["AuthController_logout_v1"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/customers/me": {
+    "/api/v1/auth/csrf": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["CustomersController_get"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch: operations["CustomersController_update"];
-        trace?: never;
-    };
-    "/customers/me/addresses": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["AddressesController_list"];
-        put?: never;
-        post: operations["AddressesController_add"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/customers/me/addresses/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        delete: operations["AddressesController_remove"];
-        options?: never;
-        head?: never;
-        patch: operations["AddressesController_update"];
-        trace?: never;
-    };
-    "/products": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["ProductsController_list"];
+        get: operations["AuthController_csrf_v1"];
         put?: never;
         post?: never;
         delete?: never;
@@ -164,87 +116,39 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/products/{id}": {
+    "/api/v1/customers/me": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["ProductsController_get"];
+        get: operations["CustomersController_get_v1"];
         put?: never;
         post?: never;
         delete?: never;
         options?: never;
         head?: never;
-        patch?: never;
+        patch: operations["CustomersController_update_v1"];
         trace?: never;
     };
-    "/products/{id}/images": {
+    "/api/v1/customers/me/addresses": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["ProductsController_images"];
+        get: operations["AddressesController_list_v1"];
         put?: never;
-        post?: never;
+        post: operations["AddressesController_add_v1"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/categories": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["CategoriesController_list"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/media/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["MediaController_serve"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/admin/products": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["AdminProductsController_create"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/admin/products/{id}": {
+    "/api/v1/customers/me/addresses/{id}": {
         parameters: {
             query?: never;
             header?: never;
@@ -254,13 +158,93 @@ export interface paths {
         get?: never;
         put?: never;
         post?: never;
-        delete: operations["AdminProductsController_archive"];
+        delete: operations["AddressesController_remove_v1"];
         options?: never;
         head?: never;
-        patch: operations["AdminProductsController_update"];
+        patch: operations["AddressesController_update_v1"];
         trace?: never;
     };
-    "/admin/products/{id}/images": {
+    "/api/v1/products": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ProductsController_list_v1"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/products/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ProductsController_get_v1"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/products/{id}/images": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ProductsController_images_v1"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/categories": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["CategoriesController_list_v1"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/media/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["MediaController_serve_v1"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/products": {
         parameters: {
             query?: never;
             header?: never;
@@ -269,30 +253,14 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["AdminProductImagesController_upload"];
+        post: operations["AdminProductsController_create_v1"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/admin/categories": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["AdminCategoriesController_create"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/admin/categories/{id}": {
+    "/api/v1/admin/products/{id}": {
         parameters: {
             query?: never;
             header?: never;
@@ -302,29 +270,13 @@ export interface paths {
         get?: never;
         put?: never;
         post?: never;
-        delete?: never;
+        delete: operations["AdminProductsController_archive_v1"];
         options?: never;
         head?: never;
-        patch: operations["AdminCategoriesController_update"];
+        patch: operations["AdminProductsController_update_v1"];
         trace?: never;
     };
-    "/admin/inventory": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["AdminInventoryController_list"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/admin/inventory/adjustments": {
+    "/api/v1/admin/products/{id}/images": {
         parameters: {
             query?: never;
             header?: never;
@@ -333,30 +285,14 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["AdminInventoryController_adjust"];
+        post: operations["AdminProductImagesController_upload_v1"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/cart": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["CartController_get"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/cart/items": {
+    "/api/v1/admin/categories": {
         parameters: {
             query?: never;
             header?: never;
@@ -365,46 +301,14 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["CartController_add"];
+        post: operations["AdminCategoriesController_create_v1"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/cart/items/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        delete: operations["CartController_remove"];
-        options?: never;
-        head?: never;
-        patch: operations["CartController_change"];
-        trace?: never;
-    };
-    "/admin/promotions": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["AdminPromotionsController_list"];
-        put?: never;
-        post: operations["AdminPromotionsController_create"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/admin/promotions/{id}": {
+    "/api/v1/admin/categories/{id}": {
         parameters: {
             query?: never;
             header?: never;
@@ -417,33 +321,17 @@ export interface paths {
         delete?: never;
         options?: never;
         head?: never;
-        patch: operations["AdminPromotionsController_update"];
+        patch: operations["AdminCategoriesController_update_v1"];
         trace?: never;
     };
-    "/orders": {
+    "/api/v1/admin/inventory": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["OrdersController_list"];
-        put?: never;
-        post: operations["OrdersController_place"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/orders/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["OrdersController_get"];
+        get: operations["AdminInventoryController_list_v1"];
         put?: never;
         post?: never;
         delete?: never;
@@ -452,7 +340,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/orders/{id}/cancellation": {
+    "/api/v1/admin/inventory/adjustments": {
         parameters: {
             query?: never;
             header?: never;
@@ -461,14 +349,30 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["OrdersController_cancel"];
+        post: operations["AdminInventoryController_adjust_v1"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/checkout/quote": {
+    "/api/v1/cart": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["CartController_get_v1"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/cart/items": {
         parameters: {
             query?: never;
             header?: never;
@@ -477,46 +381,14 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["CheckoutController_quote"];
+        post: operations["CartController_add_v1"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/delivery-methods": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["DeliveryMethodsController_list"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/admin/orders": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["AdminOrdersController_list"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/admin/orders/{id}/status": {
+    "/api/v1/cart/items/{id}": {
         parameters: {
             query?: never;
             header?: never;
@@ -526,29 +398,29 @@ export interface paths {
         get?: never;
         put?: never;
         post?: never;
-        delete?: never;
+        delete: operations["CartController_remove_v1"];
         options?: never;
         head?: never;
-        patch: operations["AdminOrdersController_changeStatus"];
+        patch: operations["CartController_change_v1"];
         trace?: never;
     };
-    "/orders/{orderId}/payments": {
+    "/api/v1/admin/promotions": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["PaymentsController_list"];
+        get: operations["AdminPromotionsController_list_v1"];
         put?: never;
-        post: operations["PaymentsController_initiate"];
+        post: operations["AdminPromotionsController_create_v1"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/webhooks/payments/{provider}": {
+    "/api/v1/admin/promotions/{id}": {
         parameters: {
             query?: never;
             header?: never;
@@ -557,21 +429,37 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["PaymentWebhookController_receive"];
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
-        patch?: never;
+        patch: operations["AdminPromotionsController_update_v1"];
         trace?: never;
     };
-    "/admin/reports/revenue": {
+    "/api/v1/orders": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["AdminReportsController_revenue"];
+        get: operations["OrdersController_list_v1"];
+        put?: never;
+        post: operations["OrdersController_place_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/orders/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["OrdersController_get_v1"];
         put?: never;
         post?: never;
         delete?: never;
@@ -580,14 +468,46 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/admin/reports/sales-by-category": {
+    "/api/v1/orders/{id}/cancellation": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["AdminReportsController_salesByCategory"];
+        get?: never;
+        put?: never;
+        post: operations["OrdersController_cancel_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/checkout/quote": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["CheckoutController_quote_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/delivery-methods": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["DeliveryMethodsController_list_v1"];
         put?: never;
         post?: never;
         delete?: never;
@@ -596,14 +516,110 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/admin/reports/top-products": {
+    "/api/v1/admin/orders": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["AdminReportsController_topProducts"];
+        get: operations["AdminOrdersController_list_v1"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/orders/{id}/status": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["AdminOrdersController_changeStatus_v1"];
+        trace?: never;
+    };
+    "/api/v1/orders/{orderId}/payments": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["PaymentsController_list_v1"];
+        put?: never;
+        post: operations["PaymentsController_initiate_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/webhooks/payments/{provider}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["PaymentWebhookController_receive_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/reports/revenue": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminReportsController_revenue_v1"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/reports/sales-by-category": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminReportsController_salesByCategory_v1"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/reports/top-products": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminReportsController_topProducts_v1"];
         put?: never;
         post?: never;
         delete?: never;
@@ -671,20 +687,76 @@ export interface components {
             email: string;
             password: string;
         };
+        UserView: {
+            id: string;
+            email: string;
+            /** @enum {string} */
+            role: "CUSTOMER" | "ADMIN";
+        };
         LoginRequestDto: {
             /** Format: email */
             email: string;
             password: string;
+        };
+        CustomerProfileView: {
+            id: string;
+            userId: string;
+            firstName: string | null;
+            lastName: string | null;
+            phone: string | null;
         };
         UpdateProfileRequestDto: {
             firstName?: string;
             lastName?: string;
             phone?: string;
         };
+        CustomerAddressView: {
+            id: string;
+            city: string;
+            street: string;
+            postalCode: string;
+        };
         AddressRequestDto: {
             city: string;
             street: string;
             postalCode: string;
+        };
+        ProductView: {
+            id: string;
+            categoryId: string;
+            name: string;
+            description: string;
+            priceMinor: number;
+            /** @enum {string} */
+            status: "DRAFT" | "ACTIVE" | "ARCHIVED";
+        };
+        ProductListResponse: {
+            items: components["schemas"]["ProductView"][];
+            total: number;
+            page: number;
+            limit: number;
+            totalPages: number;
+        };
+        ProductImageView: {
+            id: string;
+            productId: string;
+            url: string;
+            sortOrder: number;
+        };
+        ProductDetailView: {
+            id: string;
+            categoryId: string;
+            name: string;
+            description: string;
+            priceMinor: number;
+            /** @enum {string} */
+            status: "DRAFT" | "ACTIVE" | "ARCHIVED";
+            images: components["schemas"]["ProductImageView"][];
+        };
+        CategoryView: {
+            id: string;
+            name: string;
+            slug: string;
         };
         CreateProductRequestDto: {
             /** Format: uuid */
@@ -717,6 +789,19 @@ export interface components {
             productId: string;
             onHand: number;
         };
+        CartItemView: {
+            id: string;
+            productId: string;
+            name: string;
+            unitPriceMinor: number;
+            quantity: number;
+            lineTotalMinor: number;
+        };
+        CartView: {
+            id: string;
+            items: components["schemas"]["CartItemView"][];
+            subtotalMinor: number;
+        };
         AddCartItemRequestDto: {
             /** Format: uuid */
             productId: string;
@@ -724,6 +809,16 @@ export interface components {
         };
         ChangeCartItemRequestDto: {
             quantity: number;
+        };
+        PromotionView: {
+            id: string;
+            code: string;
+            /** @enum {string} */
+            discountType: "PERCENTAGE" | "FIXED_AMOUNT";
+            value: number;
+            minOrderMinor: number;
+            expiresAt: string;
+            usageLimit: number;
         };
         CreatePromotionRequestDto: {
             code: string;
@@ -751,14 +846,89 @@ export interface components {
             shippingAddress: components["schemas"]["ShippingAddressDto"];
             promoCode?: string;
         };
+        OrderItemView: {
+            productId: string;
+            productName: string;
+            unitPriceMinor: number;
+            quantity: number;
+            lineTotalMinor: number;
+        };
+        OrderView: {
+            id: string;
+            /** @enum {string} */
+            status: "PENDING_PAYMENT" | "PAID" | "PROCESSING" | "SHIPPED" | "DELIVERED" | "CANCELLED";
+            subtotalMinor: number;
+            discountMinor: number;
+            /** @enum {string} */
+            deliveryMethod: "COURIER" | "POSTAL_SERVICE" | "PICKUP";
+            deliveryFeeMinor: number;
+            totalMinor: number;
+            shippingAddress: Record<string, never>;
+            promotionId: string | null;
+            items: components["schemas"]["OrderItemView"][];
+            createdAt: string;
+        };
         QuoteCheckoutRequestDto: {
             /** @enum {string} */
             deliveryMethod: "COURIER" | "POSTAL_SERVICE" | "PICKUP";
             promoCode?: string;
         };
+        QuoteLineView: {
+            productId: string;
+            name: string;
+            unitPriceMinor: number;
+            quantity: number;
+            availableQuantity: number;
+            lineTotalMinor: number;
+        };
+        QuoteView: {
+            items: components["schemas"]["QuoteLineView"][];
+            subtotalMinor: number;
+            discountMinor: number;
+            /** @enum {string} */
+            deliveryMethod: "COURIER" | "POSTAL_SERVICE" | "PICKUP";
+            deliveryFeeMinor: number;
+            totalMinor: number;
+        };
         ChangeOrderStatusRequestDto: {
             /** @enum {string} */
             status: "PENDING_PAYMENT" | "PAID" | "PROCESSING" | "SHIPPED" | "DELIVERED" | "CANCELLED";
+        };
+        PaymentInitiatedView: {
+            paymentId: string;
+            providerReference: string;
+            redirectUrl: string;
+        };
+        PaymentAttemptView: {
+            providerReference: string;
+            /** @enum {string} */
+            status: "SUCCEEDED" | "FAILED" | "PENDING";
+        };
+        PaymentView: {
+            id: string;
+            orderId: string;
+            amountMinor: number;
+            /** @enum {string} */
+            status: "SUCCEEDED" | "FAILED" | "PENDING";
+            attempts: components["schemas"]["PaymentAttemptView"][];
+        };
+        RevenueReportView: {
+            from: string;
+            to: string;
+            totalMinor: number;
+            orderCount: number;
+        };
+        SalesByCategoryView: {
+            categoryId: string;
+            categoryName: string;
+            unitsSold: number;
+            revenueMinor: number;
+        };
+        TopProductView: {
+            productId: string;
+            productName: string;
+            unitsSold: number;
+            revenueMinor: number;
         };
     };
     responses: never;
@@ -769,7 +939,7 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
-    AppController_getHello: {
+    AppController_getHello_v1: {
         parameters: {
             query?: never;
             header?: never;
@@ -788,7 +958,7 @@ export interface operations {
             };
         };
     };
-    HealthController_check: {
+    HealthController_check_v1: {
         parameters: {
             query?: never;
             header?: never;
@@ -864,7 +1034,7 @@ export interface operations {
             };
         };
     };
-    AuthController_register: {
+    AuthController_register_v1: {
         parameters: {
             query?: never;
             header?: never;
@@ -882,12 +1052,12 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": Record<string, never>;
+                    "application/json": components["schemas"]["UserView"];
                 };
             };
         };
     };
-    AuthController_login: {
+    AuthController_login_v1: {
         parameters: {
             query?: never;
             header?: never;
@@ -905,12 +1075,12 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": Record<string, never>;
+                    "application/json": components["schemas"]["UserView"];
                 };
             };
         };
     };
-    AuthController_refresh: {
+    AuthController_refresh_v1: {
         parameters: {
             query?: never;
             header?: never;
@@ -927,7 +1097,7 @@ export interface operations {
             };
         };
     };
-    AuthController_logout: {
+    AuthController_logout_v1: {
         parameters: {
             query?: never;
             header?: never;
@@ -944,7 +1114,24 @@ export interface operations {
             };
         };
     };
-    CustomersController_get: {
+    AuthController_csrf_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    CustomersController_get_v1: {
         parameters: {
             query?: never;
             header?: never;
@@ -958,12 +1145,12 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": Record<string, never>;
+                    "application/json": components["schemas"]["CustomerProfileView"];
                 };
             };
         };
     };
-    CustomersController_update: {
+    CustomersController_update_v1: {
         parameters: {
             query?: never;
             header?: never;
@@ -981,12 +1168,12 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": Record<string, never>;
+                    "application/json": components["schemas"]["CustomerProfileView"];
                 };
             };
         };
     };
-    AddressesController_list: {
+    AddressesController_list_v1: {
         parameters: {
             query?: never;
             header?: never;
@@ -1000,12 +1187,12 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": Record<string, never>[];
+                    "application/json": components["schemas"]["CustomerAddressView"][];
                 };
             };
         };
     };
-    AddressesController_add: {
+    AddressesController_add_v1: {
         parameters: {
             query?: never;
             header?: never;
@@ -1023,12 +1210,12 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": Record<string, never>;
+                    "application/json": components["schemas"]["CustomerAddressView"];
                 };
             };
         };
     };
-    AddressesController_remove: {
+    AddressesController_remove_v1: {
         parameters: {
             query?: never;
             header?: never;
@@ -1047,7 +1234,7 @@ export interface operations {
             };
         };
     };
-    AddressesController_update: {
+    AddressesController_update_v1: {
         parameters: {
             query?: never;
             header?: never;
@@ -1067,12 +1254,12 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": Record<string, never>;
+                    "application/json": components["schemas"]["CustomerAddressView"];
                 };
             };
         };
     };
-    ProductsController_list: {
+    ProductsController_list_v1: {
         parameters: {
             query?: {
                 categoryId?: string;
@@ -1088,11 +1275,13 @@ export interface operations {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": components["schemas"]["ProductListResponse"];
+                };
             };
         };
     };
-    ProductsController_get: {
+    ProductsController_get_v1: {
         parameters: {
             query?: never;
             header?: never;
@@ -1108,12 +1297,12 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": Record<string, never>;
+                    "application/json": components["schemas"]["ProductDetailView"];
                 };
             };
         };
     };
-    ProductsController_images: {
+    ProductsController_images_v1: {
         parameters: {
             query?: never;
             header?: never;
@@ -1129,12 +1318,12 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": Record<string, never>[];
+                    "application/json": components["schemas"]["ProductImageView"][];
                 };
             };
         };
     };
-    CategoriesController_list: {
+    CategoriesController_list_v1: {
         parameters: {
             query?: never;
             header?: never;
@@ -1148,12 +1337,12 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": Record<string, never>[];
+                    "application/json": components["schemas"]["CategoryView"][];
                 };
             };
         };
     };
-    MediaController_serve: {
+    MediaController_serve_v1: {
         parameters: {
             query?: never;
             header?: never;
@@ -1172,7 +1361,7 @@ export interface operations {
             };
         };
     };
-    AdminProductsController_create: {
+    AdminProductsController_create_v1: {
         parameters: {
             query?: never;
             header?: never;
@@ -1190,12 +1379,12 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": Record<string, never>;
+                    "application/json": components["schemas"]["ProductView"];
                 };
             };
         };
     };
-    AdminProductsController_archive: {
+    AdminProductsController_archive_v1: {
         parameters: {
             query?: never;
             header?: never;
@@ -1214,7 +1403,7 @@ export interface operations {
             };
         };
     };
-    AdminProductsController_update: {
+    AdminProductsController_update_v1: {
         parameters: {
             query?: never;
             header?: never;
@@ -1234,12 +1423,12 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": Record<string, never>;
+                    "application/json": components["schemas"]["ProductView"];
                 };
             };
         };
     };
-    AdminProductImagesController_upload: {
+    AdminProductImagesController_upload_v1: {
         parameters: {
             query?: never;
             header?: never;
@@ -1255,12 +1444,12 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": Record<string, never>;
+                    "application/json": components["schemas"]["ProductImageView"];
                 };
             };
         };
     };
-    AdminCategoriesController_create: {
+    AdminCategoriesController_create_v1: {
         parameters: {
             query?: never;
             header?: never;
@@ -1278,12 +1467,12 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": Record<string, never>;
+                    "application/json": components["schemas"]["CategoryView"];
                 };
             };
         };
     };
-    AdminCategoriesController_update: {
+    AdminCategoriesController_update_v1: {
         parameters: {
             query?: never;
             header?: never;
@@ -1303,12 +1492,12 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": Record<string, never>;
+                    "application/json": components["schemas"]["CategoryView"];
                 };
             };
         };
     };
-    AdminInventoryController_list: {
+    AdminInventoryController_list_v1: {
         parameters: {
             query?: never;
             header?: never;
@@ -1327,7 +1516,7 @@ export interface operations {
             };
         };
     };
-    AdminInventoryController_adjust: {
+    AdminInventoryController_adjust_v1: {
         parameters: {
             query?: never;
             header?: never;
@@ -1348,7 +1537,7 @@ export interface operations {
             };
         };
     };
-    CartController_get: {
+    CartController_get_v1: {
         parameters: {
             query?: never;
             header?: never;
@@ -1362,12 +1551,12 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": Record<string, never>;
+                    "application/json": components["schemas"]["CartView"];
                 };
             };
         };
     };
-    CartController_add: {
+    CartController_add_v1: {
         parameters: {
             query?: never;
             header?: never;
@@ -1385,12 +1574,12 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": Record<string, never>;
+                    "application/json": components["schemas"]["CartView"];
                 };
             };
         };
     };
-    CartController_remove: {
+    CartController_remove_v1: {
         parameters: {
             query?: never;
             header?: never;
@@ -1406,12 +1595,12 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": Record<string, never>;
+                    "application/json": components["schemas"]["CartView"];
                 };
             };
         };
     };
-    CartController_change: {
+    CartController_change_v1: {
         parameters: {
             query?: never;
             header?: never;
@@ -1431,12 +1620,12 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": Record<string, never>;
+                    "application/json": components["schemas"]["CartView"];
                 };
             };
         };
     };
-    AdminPromotionsController_list: {
+    AdminPromotionsController_list_v1: {
         parameters: {
             query?: never;
             header?: never;
@@ -1450,12 +1639,12 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": Record<string, never>[];
+                    "application/json": components["schemas"]["PromotionView"][];
                 };
             };
         };
     };
-    AdminPromotionsController_create: {
+    AdminPromotionsController_create_v1: {
         parameters: {
             query?: never;
             header?: never;
@@ -1473,12 +1662,12 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": Record<string, never>;
+                    "application/json": components["schemas"]["PromotionView"];
                 };
             };
         };
     };
-    AdminPromotionsController_update: {
+    AdminPromotionsController_update_v1: {
         parameters: {
             query?: never;
             header?: never;
@@ -1498,12 +1687,12 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": Record<string, never>;
+                    "application/json": components["schemas"]["PromotionView"];
                 };
             };
         };
     };
-    OrdersController_list: {
+    OrdersController_list_v1: {
         parameters: {
             query?: never;
             header?: never;
@@ -1517,12 +1706,12 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": Record<string, never>[];
+                    "application/json": components["schemas"]["OrderView"][];
                 };
             };
         };
     };
-    OrdersController_place: {
+    OrdersController_place_v1: {
         parameters: {
             query?: never;
             header?: never;
@@ -1540,12 +1729,12 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": Record<string, never>;
+                    "application/json": components["schemas"]["OrderView"];
                 };
             };
         };
     };
-    OrdersController_get: {
+    OrdersController_get_v1: {
         parameters: {
             query?: never;
             header?: never;
@@ -1561,12 +1750,12 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": Record<string, never>;
+                    "application/json": components["schemas"]["OrderView"];
                 };
             };
         };
     };
-    OrdersController_cancel: {
+    OrdersController_cancel_v1: {
         parameters: {
             query?: never;
             header?: never;
@@ -1582,12 +1771,12 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": Record<string, never>;
+                    "application/json": components["schemas"]["OrderView"];
                 };
             };
         };
     };
-    CheckoutController_quote: {
+    CheckoutController_quote_v1: {
         parameters: {
             query?: never;
             header?: never;
@@ -1605,12 +1794,12 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": Record<string, never>;
+                    "application/json": components["schemas"]["QuoteView"];
                 };
             };
         };
     };
-    DeliveryMethodsController_list: {
+    DeliveryMethodsController_list_v1: {
         parameters: {
             query?: never;
             header?: never;
@@ -1629,7 +1818,7 @@ export interface operations {
             };
         };
     };
-    AdminOrdersController_list: {
+    AdminOrdersController_list_v1: {
         parameters: {
             query?: never;
             header?: never;
@@ -1643,12 +1832,12 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": Record<string, never>[];
+                    "application/json": components["schemas"]["OrderView"][];
                 };
             };
         };
     };
-    AdminOrdersController_changeStatus: {
+    AdminOrdersController_changeStatus_v1: {
         parameters: {
             query?: never;
             header?: never;
@@ -1668,12 +1857,12 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": Record<string, never>;
+                    "application/json": components["schemas"]["OrderView"];
                 };
             };
         };
     };
-    PaymentsController_list: {
+    PaymentsController_list_v1: {
         parameters: {
             query?: never;
             header?: never;
@@ -1689,12 +1878,12 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": Record<string, never>[];
+                    "application/json": components["schemas"]["PaymentView"][];
                 };
             };
         };
     };
-    PaymentsController_initiate: {
+    PaymentsController_initiate_v1: {
         parameters: {
             query?: never;
             header?: never;
@@ -1710,12 +1899,12 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": Record<string, never>;
+                    "application/json": components["schemas"]["PaymentInitiatedView"];
                 };
             };
         };
     };
-    PaymentWebhookController_receive: {
+    PaymentWebhookController_receive_v1: {
         parameters: {
             query?: never;
             header?: never;
@@ -1734,7 +1923,7 @@ export interface operations {
             };
         };
     };
-    AdminReportsController_revenue: {
+    AdminReportsController_revenue_v1: {
         parameters: {
             query?: {
                 from?: string;
@@ -1751,12 +1940,12 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": Record<string, never>;
+                    "application/json": components["schemas"]["RevenueReportView"];
                 };
             };
         };
     };
-    AdminReportsController_salesByCategory: {
+    AdminReportsController_salesByCategory_v1: {
         parameters: {
             query?: never;
             header?: never;
@@ -1770,12 +1959,12 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": Record<string, never>[];
+                    "application/json": components["schemas"]["SalesByCategoryView"][];
                 };
             };
         };
     };
-    AdminReportsController_topProducts: {
+    AdminReportsController_topProducts_v1: {
         parameters: {
             query?: {
                 limit?: number;
@@ -1791,7 +1980,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": Record<string, never>[];
+                    "application/json": components["schemas"]["TopProductView"][];
                 };
             };
         };

@@ -1,9 +1,9 @@
 {
   "openapi": "3.0.0",
   "paths": {
-    "/": {
+    "/api/v1": {
       "get": {
-        "operationId": "AppController_getHello",
+        "operationId": "AppController_getHello_v1",
         "parameters": [],
         "responses": {
           "200": {
@@ -22,9 +22,9 @@
         ]
       }
     },
-    "/health": {
+    "/api/v1/health": {
       "get": {
-        "operationId": "HealthController_check",
+        "operationId": "HealthController_check_v1",
         "parameters": [],
         "responses": {
           "200": {
@@ -112,9 +112,9 @@
         ]
       }
     },
-    "/auth/register": {
+    "/api/v1/auth/register": {
       "post": {
-        "operationId": "AuthController_register",
+        "operationId": "AuthController_register_v1",
         "parameters": [],
         "requestBody": {
           "required": true,
@@ -132,7 +132,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/UserView"
                 }
               }
             }
@@ -143,9 +143,9 @@
         ]
       }
     },
-    "/auth/login": {
+    "/api/v1/auth/login": {
       "post": {
-        "operationId": "AuthController_login",
+        "operationId": "AuthController_login_v1",
         "parameters": [],
         "requestBody": {
           "required": true,
@@ -163,7 +163,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/UserView"
                 }
               }
             }
@@ -174,9 +174,9 @@
         ]
       }
     },
-    "/auth/refresh": {
+    "/api/v1/auth/refresh": {
       "post": {
-        "operationId": "AuthController_refresh",
+        "operationId": "AuthController_refresh_v1",
         "parameters": [],
         "responses": {
           "200": {
@@ -188,9 +188,9 @@
         ]
       }
     },
-    "/auth/logout": {
+    "/api/v1/auth/logout": {
       "post": {
-        "operationId": "AuthController_logout",
+        "operationId": "AuthController_logout_v1",
         "parameters": [],
         "responses": {
           "204": {
@@ -202,9 +202,23 @@
         ]
       }
     },
-    "/customers/me": {
+    "/api/v1/auth/csrf": {
       "get": {
-        "operationId": "CustomersController_get",
+        "operationId": "AuthController_csrf_v1",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/api/v1/customers/me": {
+      "get": {
+        "operationId": "CustomersController_get_v1",
         "parameters": [],
         "responses": {
           "200": {
@@ -212,7 +226,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/CustomerProfileView"
                 }
               }
             }
@@ -223,7 +237,7 @@
         ]
       },
       "patch": {
-        "operationId": "CustomersController_update",
+        "operationId": "CustomersController_update_v1",
         "parameters": [],
         "requestBody": {
           "required": true,
@@ -241,7 +255,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/CustomerProfileView"
                 }
               }
             }
@@ -252,9 +266,9 @@
         ]
       }
     },
-    "/customers/me/addresses": {
+    "/api/v1/customers/me/addresses": {
       "get": {
-        "operationId": "AddressesController_list",
+        "operationId": "AddressesController_list_v1",
         "parameters": [],
         "responses": {
           "200": {
@@ -264,7 +278,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "type": "object"
+                    "$ref": "#/components/schemas/CustomerAddressView"
                   }
                 }
               }
@@ -276,7 +290,7 @@
         ]
       },
       "post": {
-        "operationId": "AddressesController_add",
+        "operationId": "AddressesController_add_v1",
         "parameters": [],
         "requestBody": {
           "required": true,
@@ -294,7 +308,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/CustomerAddressView"
                 }
               }
             }
@@ -305,9 +319,9 @@
         ]
       }
     },
-    "/customers/me/addresses/{id}": {
+    "/api/v1/customers/me/addresses/{id}": {
       "patch": {
-        "operationId": "AddressesController_update",
+        "operationId": "AddressesController_update_v1",
         "parameters": [
           {
             "name": "id",
@@ -334,7 +348,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/CustomerAddressView"
                 }
               }
             }
@@ -345,7 +359,7 @@
         ]
       },
       "delete": {
-        "operationId": "AddressesController_remove",
+        "operationId": "AddressesController_remove_v1",
         "parameters": [
           {
             "name": "id",
@@ -366,9 +380,9 @@
         ]
       }
     },
-    "/products": {
+    "/api/v1/products": {
       "get": {
-        "operationId": "ProductsController_list",
+        "operationId": "ProductsController_list_v1",
         "parameters": [
           {
             "name": "categoryId",
@@ -391,7 +405,14 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductListResponse"
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -399,9 +420,9 @@
         ]
       }
     },
-    "/products/{id}": {
+    "/api/v1/products/{id}": {
       "get": {
-        "operationId": "ProductsController_get",
+        "operationId": "ProductsController_get_v1",
         "parameters": [
           {
             "name": "id",
@@ -418,7 +439,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/ProductDetailView"
                 }
               }
             }
@@ -429,9 +450,9 @@
         ]
       }
     },
-    "/products/{id}/images": {
+    "/api/v1/products/{id}/images": {
       "get": {
-        "operationId": "ProductsController_images",
+        "operationId": "ProductsController_images_v1",
         "parameters": [
           {
             "name": "id",
@@ -450,7 +471,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "type": "object"
+                    "$ref": "#/components/schemas/ProductImageView"
                   }
                 }
               }
@@ -462,9 +483,9 @@
         ]
       }
     },
-    "/categories": {
+    "/api/v1/categories": {
       "get": {
-        "operationId": "CategoriesController_list",
+        "operationId": "CategoriesController_list_v1",
         "parameters": [],
         "responses": {
           "200": {
@@ -474,7 +495,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "type": "object"
+                    "$ref": "#/components/schemas/CategoryView"
                   }
                 }
               }
@@ -486,9 +507,9 @@
         ]
       }
     },
-    "/media/{id}": {
+    "/api/v1/media/{id}": {
       "get": {
-        "operationId": "MediaController_serve",
+        "operationId": "MediaController_serve_v1",
         "parameters": [
           {
             "name": "id",
@@ -509,9 +530,9 @@
         ]
       }
     },
-    "/admin/products": {
+    "/api/v1/admin/products": {
       "post": {
-        "operationId": "AdminProductsController_create",
+        "operationId": "AdminProductsController_create_v1",
         "parameters": [],
         "requestBody": {
           "required": true,
@@ -529,7 +550,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/ProductView"
                 }
               }
             }
@@ -540,9 +561,9 @@
         ]
       }
     },
-    "/admin/products/{id}": {
+    "/api/v1/admin/products/{id}": {
       "patch": {
-        "operationId": "AdminProductsController_update",
+        "operationId": "AdminProductsController_update_v1",
         "parameters": [
           {
             "name": "id",
@@ -569,7 +590,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/ProductView"
                 }
               }
             }
@@ -580,7 +601,7 @@
         ]
       },
       "delete": {
-        "operationId": "AdminProductsController_archive",
+        "operationId": "AdminProductsController_archive_v1",
         "parameters": [
           {
             "name": "id",
@@ -601,9 +622,9 @@
         ]
       }
     },
-    "/admin/products/{id}/images": {
+    "/api/v1/admin/products/{id}/images": {
       "post": {
-        "operationId": "AdminProductImagesController_upload",
+        "operationId": "AdminProductImagesController_upload_v1",
         "parameters": [
           {
             "name": "id",
@@ -620,7 +641,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/ProductImageView"
                 }
               }
             }
@@ -631,9 +652,9 @@
         ]
       }
     },
-    "/admin/categories": {
+    "/api/v1/admin/categories": {
       "post": {
-        "operationId": "AdminCategoriesController_create",
+        "operationId": "AdminCategoriesController_create_v1",
         "parameters": [],
         "requestBody": {
           "required": true,
@@ -651,7 +672,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/CategoryView"
                 }
               }
             }
@@ -662,9 +683,9 @@
         ]
       }
     },
-    "/admin/categories/{id}": {
+    "/api/v1/admin/categories/{id}": {
       "patch": {
-        "operationId": "AdminCategoriesController_update",
+        "operationId": "AdminCategoriesController_update_v1",
         "parameters": [
           {
             "name": "id",
@@ -691,7 +712,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/CategoryView"
                 }
               }
             }
@@ -702,9 +723,9 @@
         ]
       }
     },
-    "/admin/inventory": {
+    "/api/v1/admin/inventory": {
       "get": {
-        "operationId": "AdminInventoryController_list",
+        "operationId": "AdminInventoryController_list_v1",
         "parameters": [],
         "responses": {
           "200": {
@@ -726,9 +747,9 @@
         ]
       }
     },
-    "/admin/inventory/adjustments": {
+    "/api/v1/admin/inventory/adjustments": {
       "post": {
-        "operationId": "AdminInventoryController_adjust",
+        "operationId": "AdminInventoryController_adjust_v1",
         "parameters": [],
         "requestBody": {
           "required": true,
@@ -750,9 +771,9 @@
         ]
       }
     },
-    "/cart": {
+    "/api/v1/cart": {
       "get": {
-        "operationId": "CartController_get",
+        "operationId": "CartController_get_v1",
         "parameters": [],
         "responses": {
           "200": {
@@ -760,7 +781,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/CartView"
                 }
               }
             }
@@ -771,9 +792,9 @@
         ]
       }
     },
-    "/cart/items": {
+    "/api/v1/cart/items": {
       "post": {
-        "operationId": "CartController_add",
+        "operationId": "CartController_add_v1",
         "parameters": [],
         "requestBody": {
           "required": true,
@@ -791,7 +812,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/CartView"
                 }
               }
             }
@@ -802,9 +823,9 @@
         ]
       }
     },
-    "/cart/items/{id}": {
+    "/api/v1/cart/items/{id}": {
       "patch": {
-        "operationId": "CartController_change",
+        "operationId": "CartController_change_v1",
         "parameters": [
           {
             "name": "id",
@@ -831,7 +852,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/CartView"
                 }
               }
             }
@@ -842,7 +863,7 @@
         ]
       },
       "delete": {
-        "operationId": "CartController_remove",
+        "operationId": "CartController_remove_v1",
         "parameters": [
           {
             "name": "id",
@@ -859,7 +880,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/CartView"
                 }
               }
             }
@@ -870,9 +891,9 @@
         ]
       }
     },
-    "/admin/promotions": {
+    "/api/v1/admin/promotions": {
       "get": {
-        "operationId": "AdminPromotionsController_list",
+        "operationId": "AdminPromotionsController_list_v1",
         "parameters": [],
         "responses": {
           "200": {
@@ -882,7 +903,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "type": "object"
+                    "$ref": "#/components/schemas/PromotionView"
                   }
                 }
               }
@@ -894,7 +915,7 @@
         ]
       },
       "post": {
-        "operationId": "AdminPromotionsController_create",
+        "operationId": "AdminPromotionsController_create_v1",
         "parameters": [],
         "requestBody": {
           "required": true,
@@ -912,7 +933,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/PromotionView"
                 }
               }
             }
@@ -923,9 +944,9 @@
         ]
       }
     },
-    "/admin/promotions/{id}": {
+    "/api/v1/admin/promotions/{id}": {
       "patch": {
-        "operationId": "AdminPromotionsController_update",
+        "operationId": "AdminPromotionsController_update_v1",
         "parameters": [
           {
             "name": "id",
@@ -952,7 +973,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/PromotionView"
                 }
               }
             }
@@ -963,9 +984,9 @@
         ]
       }
     },
-    "/orders": {
+    "/api/v1/orders": {
       "post": {
-        "operationId": "OrdersController_place",
+        "operationId": "OrdersController_place_v1",
         "parameters": [],
         "requestBody": {
           "required": true,
@@ -983,7 +1004,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/OrderView"
                 }
               }
             }
@@ -994,7 +1015,7 @@
         ]
       },
       "get": {
-        "operationId": "OrdersController_list",
+        "operationId": "OrdersController_list_v1",
         "parameters": [],
         "responses": {
           "200": {
@@ -1004,7 +1025,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "type": "object"
+                    "$ref": "#/components/schemas/OrderView"
                   }
                 }
               }
@@ -1016,9 +1037,9 @@
         ]
       }
     },
-    "/orders/{id}": {
+    "/api/v1/orders/{id}": {
       "get": {
-        "operationId": "OrdersController_get",
+        "operationId": "OrdersController_get_v1",
         "parameters": [
           {
             "name": "id",
@@ -1035,7 +1056,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/OrderView"
                 }
               }
             }
@@ -1046,9 +1067,9 @@
         ]
       }
     },
-    "/orders/{id}/cancellation": {
+    "/api/v1/orders/{id}/cancellation": {
       "post": {
-        "operationId": "OrdersController_cancel",
+        "operationId": "OrdersController_cancel_v1",
         "parameters": [
           {
             "name": "id",
@@ -1065,7 +1086,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/OrderView"
                 }
               }
             }
@@ -1076,9 +1097,9 @@
         ]
       }
     },
-    "/checkout/quote": {
+    "/api/v1/checkout/quote": {
       "post": {
-        "operationId": "CheckoutController_quote",
+        "operationId": "CheckoutController_quote_v1",
         "parameters": [],
         "requestBody": {
           "required": true,
@@ -1096,7 +1117,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/QuoteView"
                 }
               }
             }
@@ -1107,9 +1128,9 @@
         ]
       }
     },
-    "/delivery-methods": {
+    "/api/v1/delivery-methods": {
       "get": {
-        "operationId": "DeliveryMethodsController_list",
+        "operationId": "DeliveryMethodsController_list_v1",
         "parameters": [],
         "responses": {
           "200": {
@@ -1131,9 +1152,9 @@
         ]
       }
     },
-    "/admin/orders": {
+    "/api/v1/admin/orders": {
       "get": {
-        "operationId": "AdminOrdersController_list",
+        "operationId": "AdminOrdersController_list_v1",
         "parameters": [],
         "responses": {
           "200": {
@@ -1143,7 +1164,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "type": "object"
+                    "$ref": "#/components/schemas/OrderView"
                   }
                 }
               }
@@ -1155,9 +1176,9 @@
         ]
       }
     },
-    "/admin/orders/{id}/status": {
+    "/api/v1/admin/orders/{id}/status": {
       "patch": {
-        "operationId": "AdminOrdersController_changeStatus",
+        "operationId": "AdminOrdersController_changeStatus_v1",
         "parameters": [
           {
             "name": "id",
@@ -1184,7 +1205,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/OrderView"
                 }
               }
             }
@@ -1195,9 +1216,9 @@
         ]
       }
     },
-    "/orders/{orderId}/payments": {
+    "/api/v1/orders/{orderId}/payments": {
       "post": {
-        "operationId": "PaymentsController_initiate",
+        "operationId": "PaymentsController_initiate_v1",
         "parameters": [
           {
             "name": "orderId",
@@ -1214,7 +1235,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/PaymentInitiatedView"
                 }
               }
             }
@@ -1225,7 +1246,7 @@
         ]
       },
       "get": {
-        "operationId": "PaymentsController_list",
+        "operationId": "PaymentsController_list_v1",
         "parameters": [
           {
             "name": "orderId",
@@ -1244,7 +1265,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "type": "object"
+                    "$ref": "#/components/schemas/PaymentView"
                   }
                 }
               }
@@ -1256,9 +1277,9 @@
         ]
       }
     },
-    "/webhooks/payments/{provider}": {
+    "/api/v1/webhooks/payments/{provider}": {
       "post": {
-        "operationId": "PaymentWebhookController_receive",
+        "operationId": "PaymentWebhookController_receive_v1",
         "parameters": [
           {
             "name": "provider",
@@ -1279,9 +1300,9 @@
         ]
       }
     },
-    "/admin/reports/revenue": {
+    "/api/v1/admin/reports/revenue": {
       "get": {
-        "operationId": "AdminReportsController_revenue",
+        "operationId": "AdminReportsController_revenue_v1",
         "parameters": [
           {
             "name": "from",
@@ -1306,7 +1327,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/RevenueReportView"
                 }
               }
             }
@@ -1317,9 +1338,9 @@
         ]
       }
     },
-    "/admin/reports/sales-by-category": {
+    "/api/v1/admin/reports/sales-by-category": {
       "get": {
-        "operationId": "AdminReportsController_salesByCategory",
+        "operationId": "AdminReportsController_salesByCategory_v1",
         "parameters": [],
         "responses": {
           "200": {
@@ -1329,7 +1350,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "type": "object"
+                    "$ref": "#/components/schemas/SalesByCategoryView"
                   }
                 }
               }
@@ -1341,9 +1362,9 @@
         ]
       }
     },
-    "/admin/reports/top-products": {
+    "/api/v1/admin/reports/top-products": {
       "get": {
-        "operationId": "AdminReportsController_topProducts",
+        "operationId": "AdminReportsController_topProducts_v1",
         "parameters": [
           {
             "name": "limit",
@@ -1364,7 +1385,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "type": "object"
+                    "$ref": "#/components/schemas/TopProductView"
                   }
                 }
               }
@@ -1519,6 +1540,29 @@
           "password"
         ]
       },
+      "UserView": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "role": {
+            "enum": [
+              "CUSTOMER",
+              "ADMIN"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "email",
+          "role"
+        ]
+      },
       "LoginRequestDto": {
         "type": "object",
         "properties": {
@@ -1535,6 +1579,36 @@
         "required": [
           "email",
           "password"
+        ]
+      },
+      "CustomerProfileView": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "userId": {
+            "type": "string"
+          },
+          "firstName": {
+            "type": "string",
+            "nullable": true
+          },
+          "lastName": {
+            "type": "string",
+            "nullable": true
+          },
+          "phone": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": [
+          "id",
+          "userId",
+          "firstName",
+          "lastName",
+          "phone"
         ]
       },
       "UpdateProfileRequestDto": {
@@ -1556,6 +1630,29 @@
             "maxLength": 30
           }
         }
+      },
+      "CustomerAddressView": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "city": {
+            "type": "string"
+          },
+          "street": {
+            "type": "string"
+          },
+          "postalCode": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "city",
+          "street",
+          "postalCode"
+        ]
       },
       "AddressRequestDto": {
         "type": "object",
@@ -1580,6 +1677,157 @@
           "city",
           "street",
           "postalCode"
+        ]
+      },
+      "ProductView": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "categoryId": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "priceMinor": {
+            "type": "number"
+          },
+          "status": {
+            "enum": [
+              "DRAFT",
+              "ACTIVE",
+              "ARCHIVED"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "categoryId",
+          "name",
+          "description",
+          "priceMinor",
+          "status"
+        ]
+      },
+      "ProductListResponse": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProductView"
+            }
+          },
+          "total": {
+            "type": "number"
+          },
+          "page": {
+            "type": "number"
+          },
+          "limit": {
+            "type": "number"
+          },
+          "totalPages": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "items",
+          "total",
+          "page",
+          "limit",
+          "totalPages"
+        ]
+      },
+      "ProductImageView": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "productId": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          },
+          "sortOrder": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "id",
+          "productId",
+          "url",
+          "sortOrder"
+        ]
+      },
+      "ProductDetailView": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "categoryId": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "priceMinor": {
+            "type": "number"
+          },
+          "status": {
+            "enum": [
+              "DRAFT",
+              "ACTIVE",
+              "ARCHIVED"
+            ],
+            "type": "string"
+          },
+          "images": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProductImageView"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "categoryId",
+          "name",
+          "description",
+          "priceMinor",
+          "status",
+          "images"
+        ]
+      },
+      "CategoryView": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "slug": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "slug"
         ]
       },
       "CreateProductRequestDto": {
@@ -1699,6 +1947,59 @@
           "onHand"
         ]
       },
+      "CartItemView": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "productId": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "unitPriceMinor": {
+            "type": "number"
+          },
+          "quantity": {
+            "type": "number"
+          },
+          "lineTotalMinor": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "id",
+          "productId",
+          "name",
+          "unitPriceMinor",
+          "quantity",
+          "lineTotalMinor"
+        ]
+      },
+      "CartView": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CartItemView"
+            }
+          },
+          "subtotalMinor": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "id",
+          "items",
+          "subtotalMinor"
+        ]
+      },
       "AddCartItemRequestDto": {
         "type": "object",
         "properties": {
@@ -1728,6 +2029,45 @@
         },
         "required": [
           "quantity"
+        ]
+      },
+      "PromotionView": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "code": {
+            "type": "string"
+          },
+          "discountType": {
+            "enum": [
+              "PERCENTAGE",
+              "FIXED_AMOUNT"
+            ],
+            "type": "string"
+          },
+          "value": {
+            "type": "number"
+          },
+          "minOrderMinor": {
+            "type": "number"
+          },
+          "expiresAt": {
+            "type": "string"
+          },
+          "usageLimit": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "id",
+          "code",
+          "discountType",
+          "value",
+          "minOrderMinor",
+          "expiresAt",
+          "usageLimit"
         ]
       },
       "CreatePromotionRequestDto": {
@@ -1839,6 +2179,101 @@
           "shippingAddress"
         ]
       },
+      "OrderItemView": {
+        "type": "object",
+        "properties": {
+          "productId": {
+            "type": "string"
+          },
+          "productName": {
+            "type": "string"
+          },
+          "unitPriceMinor": {
+            "type": "number"
+          },
+          "quantity": {
+            "type": "number"
+          },
+          "lineTotalMinor": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "productId",
+          "productName",
+          "unitPriceMinor",
+          "quantity",
+          "lineTotalMinor"
+        ]
+      },
+      "OrderView": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "PENDING_PAYMENT",
+              "PAID",
+              "PROCESSING",
+              "SHIPPED",
+              "DELIVERED",
+              "CANCELLED"
+            ],
+            "type": "string"
+          },
+          "subtotalMinor": {
+            "type": "number"
+          },
+          "discountMinor": {
+            "type": "number"
+          },
+          "deliveryMethod": {
+            "enum": [
+              "COURIER",
+              "POSTAL_SERVICE",
+              "PICKUP"
+            ],
+            "type": "string"
+          },
+          "deliveryFeeMinor": {
+            "type": "number"
+          },
+          "totalMinor": {
+            "type": "number"
+          },
+          "shippingAddress": {
+            "type": "object"
+          },
+          "promotionId": {
+            "type": "string",
+            "nullable": true
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OrderItemView"
+            }
+          },
+          "createdAt": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "status",
+          "subtotalMinor",
+          "discountMinor",
+          "deliveryMethod",
+          "deliveryFeeMinor",
+          "totalMinor",
+          "shippingAddress",
+          "promotionId",
+          "items",
+          "createdAt"
+        ]
+      },
       "QuoteCheckoutRequestDto": {
         "type": "object",
         "properties": {
@@ -1859,6 +2294,76 @@
           "deliveryMethod"
         ]
       },
+      "QuoteLineView": {
+        "type": "object",
+        "properties": {
+          "productId": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "unitPriceMinor": {
+            "type": "number"
+          },
+          "quantity": {
+            "type": "number"
+          },
+          "availableQuantity": {
+            "type": "number"
+          },
+          "lineTotalMinor": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "productId",
+          "name",
+          "unitPriceMinor",
+          "quantity",
+          "availableQuantity",
+          "lineTotalMinor"
+        ]
+      },
+      "QuoteView": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QuoteLineView"
+            }
+          },
+          "subtotalMinor": {
+            "type": "number"
+          },
+          "discountMinor": {
+            "type": "number"
+          },
+          "deliveryMethod": {
+            "type": "string",
+            "enum": [
+              "COURIER",
+              "POSTAL_SERVICE",
+              "PICKUP"
+            ]
+          },
+          "deliveryFeeMinor": {
+            "type": "number"
+          },
+          "totalMinor": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "items",
+          "subtotalMinor",
+          "discountMinor",
+          "deliveryMethod",
+          "deliveryFeeMinor",
+          "totalMinor"
+        ]
+      },
       "ChangeOrderStatusRequestDto": {
         "type": "object",
         "properties": {
@@ -1876,6 +2381,149 @@
         },
         "required": [
           "status"
+        ]
+      },
+      "PaymentInitiatedView": {
+        "type": "object",
+        "properties": {
+          "paymentId": {
+            "type": "string"
+          },
+          "providerReference": {
+            "type": "string"
+          },
+          "redirectUrl": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "paymentId",
+          "providerReference",
+          "redirectUrl"
+        ]
+      },
+      "PaymentAttemptView": {
+        "type": "object",
+        "properties": {
+          "providerReference": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "SUCCEEDED",
+              "FAILED",
+              "PENDING"
+            ]
+          }
+        },
+        "required": [
+          "providerReference",
+          "status"
+        ]
+      },
+      "PaymentView": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "orderId": {
+            "type": "string"
+          },
+          "amountMinor": {
+            "type": "number"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "SUCCEEDED",
+              "FAILED",
+              "PENDING"
+            ]
+          },
+          "attempts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PaymentAttemptView"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "orderId",
+          "amountMinor",
+          "status",
+          "attempts"
+        ]
+      },
+      "RevenueReportView": {
+        "type": "object",
+        "properties": {
+          "from": {
+            "type": "string"
+          },
+          "to": {
+            "type": "string"
+          },
+          "totalMinor": {
+            "type": "number"
+          },
+          "orderCount": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "from",
+          "to",
+          "totalMinor",
+          "orderCount"
+        ]
+      },
+      "SalesByCategoryView": {
+        "type": "object",
+        "properties": {
+          "categoryId": {
+            "type": "string"
+          },
+          "categoryName": {
+            "type": "string"
+          },
+          "unitsSold": {
+            "type": "number"
+          },
+          "revenueMinor": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "categoryId",
+          "categoryName",
+          "unitsSold",
+          "revenueMinor"
+        ]
+      },
+      "TopProductView": {
+        "type": "object",
+        "properties": {
+          "productId": {
+            "type": "string"
+          },
+          "productName": {
+            "type": "string"
+          },
+          "unitsSold": {
+            "type": "number"
+          },
+          "revenueMinor": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "productId",
+          "productName",
+          "unitsSold",
+          "revenueMinor"
         ]
       }
     }
