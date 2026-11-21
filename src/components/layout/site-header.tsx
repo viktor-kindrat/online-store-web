@@ -8,6 +8,7 @@ const NAV_LINKS = [
   { href: '/', label: 'Catalog' },
   { href: '/cart', label: 'Cart' },
   { href: '/orders', label: 'Orders' },
+  { href: '/admin', label: 'Admin' },
 ];
 
 export function SiteHeader() {

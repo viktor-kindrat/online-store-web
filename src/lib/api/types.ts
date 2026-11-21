@@ -104,3 +104,43 @@ export interface PaymentInitiatedView {
   providerReference: string;
   redirectUrl: string;
 }
+
+export type DiscountType = 'PERCENTAGE' | 'FIXED_AMOUNT';
+
+export interface Promotion {
+  id: string;
+  code: string;
+  discountType: DiscountType;
+  value: number;
+  minOrderMinor: number;
+  expiresAt: string;
+  usageLimit: number;
+}
+
+export interface StockBalanceView {
+  productId: string;
+  onHand: number;
+  reserved: number;
+  available: number;
+}
+
+export interface RevenueReport {
+  from: string;
+  to: string;
+  totalMinor: number;
+  orderCount: number;
+}
+
+export interface SalesByCategoryRow {
+  categoryId: string;
+  categoryName: string;
+  unitsSold: number;
+  revenueMinor: number;
+}
+
+export interface TopProductRow {
+  productId: string;
+  productName: string;
+  unitsSold: number;
+  revenueMinor: number;
+}
