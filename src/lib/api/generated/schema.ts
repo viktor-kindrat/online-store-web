@@ -100,6 +100,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/auth/me": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AuthController_me_v1"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/auth/csrf": {
         parameters: {
             query?: never;
@@ -244,6 +260,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/media/assets/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["MediaAssetsController_serve_v1"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/admin/products": {
         parameters: {
             query?: never;
@@ -286,6 +318,22 @@ export interface paths {
         get?: never;
         put?: never;
         post: operations["AdminProductImagesController_upload_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/media": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AdminMediaController_upload_v1"];
         delete?: never;
         options?: never;
         head?: never;
@@ -728,7 +776,8 @@ export interface components {
             description: string;
             priceMinor: number;
             /** @enum {string} */
-            status: "DRAFT" | "ACTIVE" | "ARCHIVED";
+            status: "ACTIVE" | "DRAFT" | "ARCHIVED";
+            primaryImageUrl: string | null;
         };
         ProductListResponse: {
             items: components["schemas"]["ProductView"][];
@@ -743,6 +792,10 @@ export interface components {
             url: string;
             sortOrder: number;
         };
+        ProductAttributeView: {
+            name: string;
+            value: string;
+        };
         ProductDetailView: {
             id: string;
             categoryId: string;
@@ -750,13 +803,20 @@ export interface components {
             description: string;
             priceMinor: number;
             /** @enum {string} */
-            status: "DRAFT" | "ACTIVE" | "ARCHIVED";
+            status: "ACTIVE" | "DRAFT" | "ARCHIVED";
+            primaryImageUrl: string | null;
             images: components["schemas"]["ProductImageView"][];
+            attributes: components["schemas"]["ProductAttributeView"][];
+            availableQuantity: number;
         };
         CategoryView: {
             id: string;
             name: string;
             slug: string;
+        };
+        ProductAttributeDto: {
+            name: string;
+            value: string;
         };
         CreateProductRequestDto: {
             /** Format: uuid */
@@ -766,6 +826,7 @@ export interface components {
             priceMinor: number;
             /** @enum {string} */
             status?: "DRAFT" | "ACTIVE" | "ARCHIVED";
+            attributes?: components["schemas"]["ProductAttributeDto"][];
         };
         UpdateProductRequestDto: {
             /** Format: uuid */
@@ -775,6 +836,11 @@ export interface components {
             priceMinor?: number;
             /** @enum {string} */
             status?: "DRAFT" | "ACTIVE" | "ARCHIVED";
+            attributes?: components["schemas"]["ProductAttributeDto"][];
+        };
+        MediaAssetView: {
+            id: string;
+            url: string;
         };
         CreateCategoryRequestDto: {
             name: string;
@@ -910,6 +976,11 @@ export interface components {
             paymentId: string;
             providerReference: string;
             redirectUrl: string;
+            /** @enum {string} */
+            method?: "GET" | "POST";
+            formFields?: {
+                [key: string]: unknown;
+            };
         };
         PaymentAttemptView: {
             providerReference: string;
@@ -1123,6 +1194,25 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+        };
+    };
+    AuthController_me_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UserView"];
+                };
             };
         };
     };
@@ -1373,6 +1463,25 @@ export interface operations {
             };
         };
     };
+    MediaAssetsController_serve_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     AdminProductsController_create_v1: {
         parameters: {
             query?: never;
@@ -1457,6 +1566,25 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ProductImageView"];
+                };
+            };
+        };
+    };
+    AdminMediaController_upload_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MediaAssetView"];
                 };
             };
         };
@@ -1931,7 +2059,9 @@ export interface operations {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": Record<string, never>;
+                };
             };
         };
     };

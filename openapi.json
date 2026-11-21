@@ -202,6 +202,27 @@
         ]
       }
     },
+    "/api/v1/auth/me": {
+      "get": {
+        "operationId": "AuthController_me_v1",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserView"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
     "/api/v1/auth/csrf": {
       "get": {
         "operationId": "AuthController_csrf_v1",
@@ -530,6 +551,29 @@
         ]
       }
     },
+    "/api/v1/media/assets/{id}": {
+      "get": {
+        "operationId": "MediaAssetsController_serve_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "MediaAssets"
+        ]
+      }
+    },
     "/api/v1/admin/products": {
       "post": {
         "operationId": "AdminProductsController_create_v1",
@@ -649,6 +693,27 @@
         },
         "tags": [
           "AdminProductImages"
+        ]
+      }
+    },
+    "/api/v1/admin/media": {
+      "post": {
+        "operationId": "AdminMediaController_upload_v1",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MediaAssetView"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "AdminMedia"
         ]
       }
     },
@@ -1292,7 +1357,14 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -1699,11 +1771,15 @@
           },
           "status": {
             "enum": [
-              "DRAFT",
               "ACTIVE",
+              "DRAFT",
               "ARCHIVED"
             ],
             "type": "string"
+          },
+          "primaryImageUrl": {
+            "type": "string",
+            "nullable": true
           }
         },
         "required": [
@@ -1712,7 +1788,8 @@
           "name",
           "description",
           "priceMinor",
-          "status"
+          "status",
+          "primaryImageUrl"
         ]
       },
       "ProductListResponse": {
@@ -1768,6 +1845,21 @@
           "sortOrder"
         ]
       },
+      "ProductAttributeView": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "value"
+        ]
+      },
       "ProductDetailView": {
         "type": "object",
         "properties": {
@@ -1788,17 +1880,30 @@
           },
           "status": {
             "enum": [
-              "DRAFT",
               "ACTIVE",
+              "DRAFT",
               "ARCHIVED"
             ],
             "type": "string"
+          },
+          "primaryImageUrl": {
+            "type": "string",
+            "nullable": true
           },
           "images": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/ProductImageView"
             }
+          },
+          "attributes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProductAttributeView"
+            }
+          },
+          "availableQuantity": {
+            "type": "number"
           }
         },
         "required": [
@@ -1808,7 +1913,10 @@
           "description",
           "priceMinor",
           "status",
-          "images"
+          "primaryImageUrl",
+          "images",
+          "attributes",
+          "availableQuantity"
         ]
       },
       "CategoryView": {
@@ -1830,6 +1938,25 @@
           "slug"
         ]
       },
+      "ProductAttributeDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100
+          },
+          "value": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          }
+        },
+        "required": [
+          "name",
+          "value"
+        ]
+      },
       "CreateProductRequestDto": {
         "type": "object",
         "properties": {
@@ -1844,11 +1971,12 @@
           },
           "description": {
             "type": "string",
-            "maxLength": 5000
+            "maxLength": 20000
           },
           "priceMinor": {
             "type": "number",
-            "minimum": 0
+            "minimum": 0,
+            "maximum": 1000000000
           },
           "status": {
             "type": "string",
@@ -1857,6 +1985,13 @@
               "ACTIVE",
               "ARCHIVED"
             ]
+          },
+          "attributes": {
+            "maxItems": 50,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProductAttributeDto"
+            }
           }
         },
         "required": [
@@ -1880,11 +2015,12 @@
           },
           "description": {
             "type": "string",
-            "maxLength": 5000
+            "maxLength": 20000
           },
           "priceMinor": {
             "type": "number",
-            "minimum": 0
+            "minimum": 0,
+            "maximum": 1000000000
           },
           "status": {
             "type": "string",
@@ -1893,8 +2029,30 @@
               "ACTIVE",
               "ARCHIVED"
             ]
+          },
+          "attributes": {
+            "maxItems": 50,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProductAttributeDto"
+            }
           }
         }
+      },
+      "MediaAssetView": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "url"
+        ]
       },
       "CreateCategoryRequestDto": {
         "type": "object",
@@ -1962,7 +2120,8 @@
           },
           "onHand": {
             "type": "number",
-            "minimum": 0
+            "minimum": 0,
+            "maximum": 1000000
           }
         },
         "required": [
@@ -2110,18 +2269,21 @@
           },
           "value": {
             "type": "number",
-            "minimum": 0
+            "minimum": 0,
+            "maximum": 1000000000
           },
           "minOrderMinor": {
             "type": "number",
-            "minimum": 0
+            "minimum": 0,
+            "maximum": 1000000000
           },
           "expiresAt": {
             "type": "string"
           },
           "usageLimit": {
             "type": "number",
-            "minimum": 1
+            "minimum": 1,
+            "maximum": 1000000
           }
         },
         "required": [
@@ -2138,18 +2300,21 @@
         "properties": {
           "value": {
             "type": "number",
-            "minimum": 0
+            "minimum": 0,
+            "maximum": 1000000000
           },
           "minOrderMinor": {
             "type": "number",
-            "minimum": 0
+            "minimum": 0,
+            "maximum": 1000000000
           },
           "expiresAt": {
             "type": "string"
           },
           "usageLimit": {
             "type": "number",
-            "minimum": 1
+            "minimum": 1,
+            "maximum": 1000000
           }
         }
       },
@@ -2441,6 +2606,17 @@
           },
           "redirectUrl": {
             "type": "string"
+          },
+          "method": {
+            "type": "string",
+            "enum": [
+              "GET",
+              "POST"
+            ]
+          },
+          "formFields": {
+            "type": "object",
+            "additionalProperties": true
           }
         },
         "required": [

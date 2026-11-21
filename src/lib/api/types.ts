@@ -29,6 +29,25 @@ export interface Product {
   description: string;
   priceMinor: number;
   status: ProductStatus;
+  primaryImageUrl: string | null;
+}
+
+export interface ProductImageView {
+  id: string;
+  productId: string;
+  url: string;
+  sortOrder: number;
+}
+
+export interface ProductAttributeView {
+  name: string;
+  value: string;
+}
+
+export interface ProductDetail extends Product {
+  images: ProductImageView[];
+  attributes: ProductAttributeView[];
+  availableQuantity: number;
 }
 
 export interface Paginated<TItem> {
@@ -99,10 +118,14 @@ export interface OrderView {
   createdAt: string;
 }
 
+export type PaymentFormFieldValue = string | number | Array<string | number>;
+
 export interface PaymentInitiatedView {
   paymentId: string;
   providerReference: string;
   redirectUrl: string;
+  method?: 'GET' | 'POST';
+  formFields?: Record<string, PaymentFormFieldValue>;
 }
 
 export type DiscountType = 'PERCENTAGE' | 'FIXED_AMOUNT';
