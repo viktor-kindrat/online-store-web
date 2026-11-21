@@ -1,5 +1,8 @@
 const BASE_URL =
   process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3000/api/v1';
+const CSRF_COOKIE = 'csrf_token';
+const CSRF_HEADER = 'X-CSRF-Token';
+const UNSAFE_METHODS = new Set(['POST', 'PUT', 'PATCH', 'DELETE']);
 
 export class ApiError extends Error {
   constructor(
@@ -12,14 +15,51 @@ export class ApiError extends Error {
   }
 }
 
+function readCookie(name: string): string | undefined {
+  if (typeof document === 'undefined') {
+    return undefined;
+  }
+  const entry = document.cookie
+    .split('; ')
+    .find((row) => row.startsWith(`${name}=`));
+  return entry?.slice(name.length + 1);
+}
+
+async function ensureCsrfToken(): Promise<string | undefined> {
+  const existing = readCookie(CSRF_COOKIE);
+  if (existing) {
+    return existing;
+  }
+  try {
+    const response = await fetch(`${BASE_URL}/auth/csrf`, {
+      credentials: 'include',
+    });
+    const data = (await response.json()) as { csrfToken?: string };
+    return data.csrfToken;
+  } catch {
+    return undefined;
+  }
+}
+
 async function request<TResponse>(
   path: string,
   init?: RequestInit,
 ): Promise<TResponse> {
+  const method = (init?.method ?? 'GET').toUpperCase();
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json',
+    ...(init?.headers as Record<string, string> | undefined),
+  };
+  if (UNSAFE_METHODS.has(method)) {
+    const csrfToken = await ensureCsrfToken();
+    if (csrfToken) {
+      headers[CSRF_HEADER] = csrfToken;
+    }
+  }
   const response = await fetch(`${BASE_URL}${path}`, {
     credentials: 'include',
-    headers: { 'Content-Type': 'application/json', ...init?.headers },
     ...init,
+    headers,
   });
   if (response.status === 204) {
     return undefined as TResponse;
