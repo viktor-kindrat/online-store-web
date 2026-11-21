@@ -45,3 +45,5 @@ next-env.d.ts
 
 # Local-only docs (not published to GitHub)
 docs/
+
+!.env.example
