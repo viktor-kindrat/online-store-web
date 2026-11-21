@@ -3,6 +3,7 @@
 import { CheckCircle2, CreditCard } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import { Skeleton } from '@/components/ui/skeleton';
 import { api, ApiError } from '@/lib/api/client';
 import { useSession } from '@/features/auth/session';
 import { useCart } from '@/features/cart/cart-store';
@@ -140,7 +141,16 @@ export function CheckoutView() {
   }
 
   if (loading || !ready) {
-    return <p>Loading…</p>;
+    return (
+      <section className="flex max-w-md flex-col gap-4">
+        <Skeleton className="h-7 w-40" />
+        <Skeleton className="h-11 w-full" />
+        <Skeleton className="h-11 w-full" />
+        <Skeleton className="h-11 w-full" />
+        <Skeleton className="h-11 w-full" />
+        <Skeleton className="h-11 w-full" />
+      </section>
+    );
   }
 
   if (order) {

@@ -4,6 +4,10 @@ import { ImageOff } from 'lucide-react';
 import Link from 'next/link';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { api, ApiError } from '@/lib/api/client';
+import {
+  ProductCardGridSkeleton,
+  ProductCardSkeleton,
+} from '@/components/ui/skeleton';
 import type { Paginated, Product } from '@/lib/api/types';
 import { excerpt, toPlainText } from '@/lib/utils/html';
 import { mediaUrl } from '@/lib/utils/media';
@@ -69,6 +73,9 @@ export function CatalogView() {
   if (error && products.length === 0) {
     return <p className="text-red-600">{error}</p>;
   }
+  if (loading && products.length === 0) {
+    return <ProductCardGridSkeleton count={6} />;
+  }
   if (!loading && !hasMore && products.length === 0) {
     return <p>No products yet.</p>;
   }
@@ -113,12 +120,14 @@ export function CatalogView() {
       {error && products.length > 0 ? (
         <p className="text-red-600">{error}</p>
       ) : null}
-      <div ref={sentinelRef} className="h-8" aria-hidden />
-      {loading ? (
-        <p className="text-center text-sm text-black/60 dark:text-white/60">
-          Loading…
-        </p>
+      {loading && products.length > 0 ? (
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <ProductCardSkeleton />
+          <ProductCardSkeleton />
+          <ProductCardSkeleton />
+        </div>
       ) : null}
+      <div ref={sentinelRef} className="h-8" aria-hidden />
     </section>
   );
 }

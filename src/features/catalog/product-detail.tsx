@@ -6,6 +6,7 @@ import { useParams } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
 import { api, ApiError } from '@/lib/api/client';
 import { useCart } from '@/features/cart/cart-store';
+import { Skeleton } from '@/components/ui/skeleton';
 import type { ProductDetail as ProductDetailModel } from '@/lib/api/types';
 import { mediaUrl } from '@/lib/utils/media';
 import { formatMinor } from '@/lib/utils/money';
@@ -72,7 +73,20 @@ export function ProductDetail() {
     return <p className="text-red-600">{error}</p>;
   }
   if (!product) {
-    return <p>Loading…</p>;
+    return (
+      <div className="flex flex-col gap-6">
+        <Skeleton className="aspect-video w-full rounded-lg" />
+        <Skeleton className="h-8 w-2/3" />
+        <Skeleton className="h-4 w-32" />
+        <Skeleton className="h-6 w-24" />
+        <div className="flex flex-col gap-2">
+          <Skeleton className="h-5 w-40" />
+          <Skeleton className="h-4 w-full" />
+          <Skeleton className="h-4 w-5/6" />
+        </div>
+        <Skeleton className="h-24 w-full" />
+      </div>
+    );
   }
 
   const galleryUrls = product.images

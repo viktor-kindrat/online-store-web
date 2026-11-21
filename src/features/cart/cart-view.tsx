@@ -2,6 +2,7 @@
 
 import { ArrowRight, Trash2 } from 'lucide-react';
 import Link from 'next/link';
+import { Skeleton } from '@/components/ui/skeleton';
 import { formatMinor } from '@/lib/utils/money';
 import { mediaUrl } from '@/lib/utils/media';
 import { useCart, MAX_LINE_QUANTITY } from './cart-store';
@@ -10,7 +11,18 @@ export function CartView() {
   const { lines, subtotalMinor, ready, setQuantity, removeItem } = useCart();
 
   if (!ready) {
-    return <p>Loading…</p>;
+    return (
+      <div className="flex flex-col divide-y divide-black/10 dark:divide-white/15">
+        {Array.from({ length: 3 }, (_, index) => (
+          <div key={index} className="flex items-center gap-4 py-3">
+            <Skeleton className="h-12 w-12" />
+            <Skeleton className="h-4 flex-1" />
+            <Skeleton className="h-8 w-20" />
+            <Skeleton className="h-4 w-24" />
+          </div>
+        ))}
+      </div>
+    );
   }
 
   if (lines.length === 0) {

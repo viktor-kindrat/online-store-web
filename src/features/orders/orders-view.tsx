@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { api, ApiError } from '@/lib/api/client';
+import { Skeleton } from '@/components/ui/skeleton';
 import type { OrderView } from '@/lib/api/types';
 import { formatMinor } from '@/lib/utils/money';
 
@@ -41,7 +42,22 @@ export function OrdersView() {
   }, [router]);
 
   if (loading) {
-    return <p>Loading…</p>;
+    return (
+      <div className="flex flex-col divide-y divide-black/10 dark:divide-white/15">
+        {Array.from({ length: 4 }, (_, index) => (
+          <div key={index} className="flex items-center justify-between py-3">
+            <div className="flex flex-col gap-2">
+              <Skeleton className="h-4 w-64" />
+              <Skeleton className="h-3 w-40" />
+            </div>
+            <div className="flex flex-col items-end gap-2">
+              <Skeleton className="h-4 w-24" />
+              <Skeleton className="h-3 w-16" />
+            </div>
+          </div>
+        ))}
+      </div>
+    );
   }
   if (error) {
     return <p className="text-red-600">{error}</p>;
