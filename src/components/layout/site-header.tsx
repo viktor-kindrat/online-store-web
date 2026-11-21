@@ -3,16 +3,14 @@
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { api, ApiError } from '@/lib/api/client';
-
-const NAV_LINKS = [
-  { href: '/', label: 'Catalog' },
-  { href: '/cart', label: 'Cart' },
-  { href: '/orders', label: 'Orders' },
-  { href: '/admin', label: 'Admin' },
-];
+import { useSession } from '@/features/auth/session';
+import { useCart } from '@/features/cart/cart-store';
+import { ThemeToggle } from '@/components/theme/theme-toggle';
 
 export function SiteHeader() {
   const router = useRouter();
+  const { user, loading, refresh } = useSession();
+  const { count } = useCart();
 
   async function logout(): Promise<void> {
     try {
@@ -22,6 +20,7 @@ export function SiteHeader() {
         throw error;
       }
     }
+    await refresh();
     router.push('/login');
     router.refresh();
   }
@@ -33,26 +32,48 @@ export function SiteHeader() {
           Online Store
         </Link>
         <div className="flex flex-1 items-center gap-4 text-sm">
-          {NAV_LINKS.map((link) => (
-            <Link key={link.href} href={link.href} className="hover:underline">
-              {link.label}
+          <Link href="/" className="hover:underline">
+            Catalog
+          </Link>
+          <Link href="/cart" className="hover:underline">
+            Cart
+            {count > 0 ? (
+              <span className="ml-1 rounded-full bg-foreground px-2 py-0.5 text-xs text-background">
+                {count}
+              </span>
+            ) : null}
+          </Link>
+          {user ? (
+            <Link href="/orders" className="hover:underline">
+              Orders
             </Link>
-          ))}
+          ) : null}
+          {user?.role === 'ADMIN' ? (
+            <Link href="/admin" className="hover:underline">
+              Admin
+            </Link>
+          ) : null}
         </div>
         <div className="flex items-center gap-4 text-sm">
-          <Link href="/login" className="hover:underline">
-            Login
-          </Link>
-          <Link href="/register" className="hover:underline">
-            Register
-          </Link>
-          <button
-            type="button"
-            onClick={() => void logout()}
-            className="rounded-md border border-black/15 px-3 py-1 hover:bg-black/5 dark:border-white/20 dark:hover:bg-white/10"
-          >
-            Logout
-          </button>
+          <ThemeToggle />
+          {loading ? null : user ? (
+            <button
+              type="button"
+              onClick={() => void logout()}
+              className="rounded-md border border-black/15 px-3 py-1 hover:bg-black/5 dark:border-white/20 dark:hover:bg-white/10"
+            >
+              Logout
+            </button>
+          ) : (
+            <>
+              <Link href="/login" className="hover:underline">
+                Login
+              </Link>
+              <Link href="/register" className="hover:underline">
+                Register
+              </Link>
+            </>
+          )}
         </div>
       </nav>
     </header>
