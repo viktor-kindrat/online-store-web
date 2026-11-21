@@ -4,7 +4,14 @@ import { useEditor, EditorContent, type Editor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Image from '@tiptap/extension-image';
 import { TextStyle, FontSize } from '@tiptap/extension-text-style';
-import { useEffect, useRef } from 'react';
+import {
+  Bold,
+  ImagePlus,
+  Italic,
+  Link2,
+  Underline as UnderlineIcon,
+} from 'lucide-react';
+import { useEffect, useRef, type ReactNode } from 'react';
 import { mediaUrl } from '@/lib/utils/media';
 
 const API_BASE =
@@ -81,21 +88,26 @@ async function uploadImage(file: File): Promise<string> {
 interface ToolbarButtonProps {
   active?: boolean;
   onClick: () => void;
-  label: string;
+  title: string;
+  children: ReactNode;
 }
 
-function ToolbarButton({ active, onClick, label }: ToolbarButtonProps) {
+function ToolbarButton({ active, onClick, title, children }: ToolbarButtonProps) {
   return (
     <button
       type="button"
+      title={title}
+      aria-label={title}
+      aria-pressed={active ?? false}
+      onMouseDown={(event) => event.preventDefault()}
       onClick={onClick}
-      className={`rounded border px-2 py-1 text-sm ${
+      className={`inline-flex items-center justify-center rounded border p-1.5 text-sm ${
         active
           ? 'border-foreground bg-foreground text-background'
           : 'border-black/15 hover:bg-black/5 dark:border-white/20 dark:hover:bg-white/10'
       }`}
     >
-      {label}
+      {children}
     </button>
   );
 }
@@ -183,25 +195,33 @@ export function RichTextEditor({ value, onChange }: RichTextEditorProps) {
     <div className="flex flex-col">
       <div className="flex flex-wrap items-center gap-1 rounded-t-md border border-black/15 bg-black/5 px-2 py-2 dark:border-white/20 dark:bg-white/5">
         <ToolbarButton
-          label="B"
+          title="Bold"
           active={editor.isActive('bold')}
           onClick={() => editor.chain().focus().toggleBold().run()}
-        />
+        >
+          <Bold className="size-4" aria-hidden />
+        </ToolbarButton>
         <ToolbarButton
-          label="I"
+          title="Italic"
           active={editor.isActive('italic')}
           onClick={() => editor.chain().focus().toggleItalic().run()}
-        />
+        >
+          <Italic className="size-4" aria-hidden />
+        </ToolbarButton>
         <ToolbarButton
-          label="U"
+          title="Underline"
           active={editor.isActive('underline')}
           onClick={() => editor.chain().focus().toggleUnderline().run()}
-        />
+        >
+          <UnderlineIcon className="size-4" aria-hidden />
+        </ToolbarButton>
         <ToolbarButton
-          label="Link"
+          title="Link"
           active={editor.isActive('link')}
           onClick={() => setLink(editor)}
-        />
+        >
+          <Link2 className="size-4" aria-hidden />
+        </ToolbarButton>
         <select
           aria-label="Font size"
           className="rounded border border-black/15 px-2 py-1 text-sm dark:border-white/20"
@@ -224,9 +244,13 @@ export function RichTextEditor({ value, onChange }: RichTextEditorProps) {
         </select>
         <button
           type="button"
+          title="Insert image"
+          aria-label="Insert image"
+          onMouseDown={(event) => event.preventDefault()}
           onClick={() => fileInputRef.current?.click()}
-          className="rounded border border-black/15 px-2 py-1 text-sm hover:bg-black/5 dark:border-white/20 dark:hover:bg-white/10"
+          className="inline-flex items-center gap-1.5 rounded border border-black/15 px-2 py-1.5 text-sm hover:bg-black/5 dark:border-white/20 dark:hover:bg-white/10"
         >
+          <ImagePlus className="size-4" aria-hidden />
           Image
         </button>
         {editor.isActive('image') ? (

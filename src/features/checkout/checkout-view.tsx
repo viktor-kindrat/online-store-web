@@ -1,5 +1,6 @@
 'use client';
 
+import { CheckCircle2, CreditCard } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { api, ApiError } from '@/lib/api/client';
@@ -145,7 +146,8 @@ export function CheckoutView() {
   if (order) {
     return (
       <section className="flex flex-col gap-4">
-        <p className="text-green-700">
+        <p className="inline-flex items-center gap-2 text-green-700">
+          <CheckCircle2 className="size-5" aria-hidden />
           Order {order.id} created — {order.status}
         </p>
         <p className="text-lg">Total: {formatMinor(order.totalMinor)}</p>
@@ -166,8 +168,9 @@ export function CheckoutView() {
           <button
             type="button"
             onClick={() => void pay()}
-            className="w-fit rounded-md bg-foreground px-4 py-2 text-background"
+            className="inline-flex w-fit items-center gap-2 rounded-md bg-foreground px-4 py-2 text-background"
           >
+            <CreditCard className="size-4" aria-hidden />
             Pay now
           </button>
         )}
@@ -305,8 +308,9 @@ export function CheckoutView() {
         type="button"
         disabled={placing}
         onClick={() => void placeOrder()}
-        className="rounded-md bg-foreground px-4 py-2 text-background disabled:opacity-60"
+        className="inline-flex items-center justify-center gap-2 rounded-md bg-foreground px-4 py-2 text-background disabled:opacity-60"
       >
+        <CheckCircle2 className="size-4" aria-hidden />
         {placing ? 'Placing…' : 'Place order'}
       </button>
     </section>

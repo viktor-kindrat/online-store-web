@@ -1,5 +1,6 @@
 'use client';
 
+import { ImageOff } from 'lucide-react';
 import Link from 'next/link';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { api, ApiError } from '@/lib/api/client';
@@ -92,7 +93,8 @@ export function CatalogView() {
                     className="h-full w-full object-cover"
                   />
                 ) : (
-                  <div className="flex h-full w-full items-center justify-center text-sm text-black/40 dark:text-white/40">
+                  <div className="flex h-full w-full flex-col items-center justify-center gap-1 text-sm text-black/40 dark:text-white/40">
+                    <ImageOff className="size-6" aria-hidden />
                     No image
                   </div>
                 )}

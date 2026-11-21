@@ -1,6 +1,7 @@
 'use client';
 
 import DOMPurify from 'isomorphic-dompurify';
+import { Ban, Check, ShoppingCart } from 'lucide-react';
 import { useParams } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
 import { api, ApiError } from '@/lib/api/client';
@@ -135,11 +136,15 @@ export function ProductDetail() {
       <h1 className="text-2xl font-semibold">{product.name}</h1>
 
       {inStock ? (
-        <p className="text-sm text-green-700 dark:text-green-400">
+        <p className="inline-flex items-center gap-1.5 text-sm text-green-700 dark:text-green-400">
+          <Check className="size-4" aria-hidden />
           В наявності: {product.availableQuantity}
         </p>
       ) : (
-        <p className="text-sm font-medium text-red-600">Немає в наявності</p>
+        <p className="inline-flex items-center gap-1.5 text-sm font-medium text-red-600">
+          <Ban className="size-4" aria-hidden />
+          Немає в наявності
+        </p>
       )}
 
       <p className="text-xl">{formatMinor(product.priceMinor)}</p>
@@ -189,9 +194,10 @@ export function ProductDetail() {
           type="button"
           onClick={handleAddToCart}
           disabled={!inStock}
-          className="rounded-md bg-foreground px-4 py-2 text-background disabled:cursor-not-allowed disabled:opacity-50"
+          className="inline-flex items-center gap-2 rounded-md bg-foreground px-4 py-2 text-background disabled:cursor-not-allowed disabled:opacity-50"
         >
-          Add to cart
+          <ShoppingCart className="size-4" aria-hidden />
+          {inStock ? 'Add to cart' : 'Unavailable'}
         </button>
       </div>
       {!inStock ? (

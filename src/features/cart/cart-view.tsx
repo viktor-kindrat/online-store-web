@@ -1,5 +1,6 @@
 'use client';
 
+import { ArrowRight, Trash2 } from 'lucide-react';
 import Link from 'next/link';
 import { formatMinor } from '@/lib/utils/money';
 import { mediaUrl } from '@/lib/utils/media';
@@ -57,8 +58,11 @@ export function CartView() {
               <button
                 type="button"
                 onClick={() => removeItem(line.productId)}
-                className="text-sm text-red-600 hover:underline"
+                aria-label="Remove item"
+                title="Remove item"
+                className="inline-flex items-center gap-1 text-sm text-red-600 hover:underline"
               >
+                <Trash2 className="size-4" aria-hidden />
                 Remove
               </button>
             </li>
@@ -71,9 +75,10 @@ export function CartView() {
         </span>
         <Link
           href="/checkout"
-          className="rounded-md bg-foreground px-4 py-2 text-background"
+          className="inline-flex items-center gap-2 rounded-md bg-foreground px-4 py-2 text-background"
         >
           Checkout
+          <ArrowRight className="size-4" aria-hidden />
         </Link>
       </div>
     </section>

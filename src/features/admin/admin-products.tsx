@@ -1,5 +1,6 @@
 'use client';
 
+import { Archive, Plus, Trash2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { api } from '@/lib/api/client';
 import type { Category, Paginated, Product } from '@/lib/api/types';
@@ -178,8 +179,9 @@ export function AdminProducts() {
               type="button"
               onClick={addAttribute}
               disabled={attributes.length >= MAX_ATTRIBUTES}
-              className="rounded-md border border-black/15 px-3 py-1 text-sm hover:bg-black/5 disabled:opacity-50 dark:border-white/20 dark:hover:bg-white/10"
+              className="inline-flex items-center gap-1.5 rounded-md border border-black/15 px-3 py-1 text-sm hover:bg-black/5 disabled:opacity-50 dark:border-white/20 dark:hover:bg-white/10"
             >
+              <Plus className="size-4" aria-hidden />
               Add characteristic
             </button>
           </div>
@@ -206,8 +208,11 @@ export function AdminProducts() {
               <button
                 type="button"
                 onClick={() => removeAttribute(index)}
-                className="text-sm text-red-600 hover:underline"
+                aria-label="Remove characteristic"
+                title="Remove characteristic"
+                className="inline-flex items-center gap-1 text-sm text-red-600 hover:underline"
               >
+                <Trash2 className="size-4" aria-hidden />
                 Remove
               </button>
             </div>
@@ -217,8 +222,9 @@ export function AdminProducts() {
         <button
           type="button"
           onClick={() => void create()}
-          className="w-fit rounded-md bg-foreground px-4 py-2 text-background"
+          className="inline-flex w-fit items-center gap-2 rounded-md bg-foreground px-4 py-2 text-background"
         >
+          <Plus className="size-4" aria-hidden />
           Create
         </button>
       </div>
@@ -243,8 +249,9 @@ export function AdminProducts() {
                 <button
                   type="button"
                   onClick={() => void archive(product.id)}
-                  className="rounded-md border border-black/15 px-3 py-1 hover:bg-black/5 dark:border-white/20 dark:hover:bg-white/10"
+                  className="inline-flex items-center gap-1.5 rounded-md border border-black/15 px-3 py-1 hover:bg-black/5 dark:border-white/20 dark:hover:bg-white/10"
                 >
+                  <Archive className="size-4" aria-hidden />
                   Archive
                 </button>
               </td>

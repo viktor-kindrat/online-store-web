@@ -1,5 +1,15 @@
 'use client';
 
+import {
+  ClipboardList,
+  LayoutGrid,
+  LogIn,
+  LogOut,
+  Shield,
+  ShoppingBag,
+  ShoppingCart,
+  UserPlus,
+} from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { api, ApiError } from '@/lib/api/client';
@@ -28,48 +38,74 @@ export function SiteHeader() {
   return (
     <header className="border-b border-black/10 dark:border-white/15">
       <nav className="mx-auto flex max-w-5xl items-center gap-6 px-4 py-4">
-        <Link href="/" className="text-lg font-semibold">
+        <Link
+          href="/"
+          className="flex items-center gap-2 text-lg font-semibold"
+        >
+          <ShoppingBag className="size-5" aria-hidden />
           Online Store
         </Link>
-        <div className="flex flex-1 items-center gap-4 text-sm">
-          <Link href="/" className="hover:underline">
+        <div className="flex flex-1 items-center gap-5 text-sm">
+          <Link href="/" className="flex items-center gap-1.5 hover:underline">
+            <LayoutGrid className="size-4" aria-hidden />
             Catalog
           </Link>
-          <Link href="/cart" className="hover:underline">
+          <Link
+            href="/cart"
+            className="flex items-center gap-1.5 hover:underline"
+          >
+            <ShoppingCart className="size-4" aria-hidden />
             Cart
             {count > 0 ? (
-              <span className="ml-1 rounded-full bg-foreground px-2 py-0.5 text-xs text-background">
+              <span className="ml-0.5 inline-flex min-w-5 items-center justify-center rounded-full bg-foreground px-1.5 py-0.5 text-xs text-background">
                 {count}
               </span>
             ) : null}
           </Link>
           {user ? (
-            <Link href="/orders" className="hover:underline">
+            <Link
+              href="/orders"
+              className="flex items-center gap-1.5 hover:underline"
+            >
+              <ClipboardList className="size-4" aria-hidden />
               Orders
             </Link>
           ) : null}
           {user?.role === 'ADMIN' ? (
-            <Link href="/admin" className="hover:underline">
+            <Link
+              href="/admin"
+              className="flex items-center gap-1.5 hover:underline"
+            >
+              <Shield className="size-4" aria-hidden />
               Admin
             </Link>
           ) : null}
         </div>
-        <div className="flex items-center gap-4 text-sm">
+        <div className="flex items-center gap-3 text-sm">
           <ThemeToggle />
           {loading ? null : user ? (
             <button
               type="button"
               onClick={() => void logout()}
-              className="rounded-md border border-black/15 px-3 py-1 hover:bg-black/5 dark:border-white/20 dark:hover:bg-white/10"
+              className="inline-flex items-center gap-2 rounded-md border border-black/15 px-3 py-1.5 hover:bg-black/5 dark:border-white/20 dark:hover:bg-white/10"
             >
+              <LogOut className="size-4" aria-hidden />
               Logout
             </button>
           ) : (
             <>
-              <Link href="/login" className="hover:underline">
+              <Link
+                href="/login"
+                className="flex items-center gap-1.5 hover:underline"
+              >
+                <LogIn className="size-4" aria-hidden />
                 Login
               </Link>
-              <Link href="/register" className="hover:underline">
+              <Link
+                href="/register"
+                className="flex items-center gap-1.5 hover:underline"
+              >
+                <UserPlus className="size-4" aria-hidden />
                 Register
               </Link>
             </>
