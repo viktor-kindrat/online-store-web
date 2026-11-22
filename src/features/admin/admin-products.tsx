@@ -1,10 +1,17 @@
 'use client';
 
-import { Archive, ImagePlus, Plus, Trash2 } from 'lucide-react';
+import { Archive, ImagePlus, Pencil, Plus, Save, Trash2, X } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { api } from '@/lib/api/client';
 import { TableRowsSkeleton } from '@/components/ui/skeleton';
-import type { Category, Paginated, Product } from '@/lib/api/types';
+import type {
+  Category,
+  Paginated,
+  Product,
+  ProductDetail,
+  ProductStatus,
+} from '@/lib/api/types';
+import { mediaUrl } from '@/lib/utils/media';
 import { formatMinor } from '@/lib/utils/money';
 import { messageOf } from './use-async-message';
 import { RichTextEditor } from './rich-text-editor';
@@ -15,6 +22,7 @@ interface AttributeRow {
 }
 
 const MAX_ATTRIBUTES = 50;
+const PRODUCT_STATUSES: readonly ProductStatus[] = ['DRAFT', 'ACTIVE', 'ARCHIVED'];
 const API_BASE =
   process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3000/api/v1';
 
@@ -69,17 +77,22 @@ async function uploadProductImage(
 export function AdminProducts() {
   const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
+  const [editingId, setEditingId] = useState<string | null>(null);
   const [categoryId, setCategoryId] = useState('');
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [priceMinor, setPriceMinor] = useState('0');
+  const [status, setStatus] = useState<ProductStatus>('ACTIVE');
   const [attributes, setAttributes] = useState<AttributeRow[]>([]);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [existingImageUrl, setExistingImageUrl] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [productsLoading, setProductsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const isEditing = editingId !== null;
 
   function selectImage(file: File | null): void {
     setImagePreview((previous) => {
@@ -89,6 +102,21 @@ export function AdminProducts() {
       return file ? URL.createObjectURL(file) : null;
     });
     setImageFile(file);
+  }
+
+  function resetForm(): void {
+    setEditingId(null);
+    setName('');
+    setDescription('');
+    setPriceMinor('0');
+    setStatus('ACTIVE');
+    setAttributes([]);
+    setCategoryId(categories[0]?.id ?? '');
+    setExistingImageUrl(null);
+    selectImage(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
   }
 
   async function reload(): Promise<void> {
@@ -160,9 +188,36 @@ export function AdminProducts() {
     setAttributes((current) => current.filter((_, i) => i !== index));
   }
 
-  async function create(): Promise<void> {
+  async function startEdit(product: Product): Promise<void> {
     setError(null);
-    if (!imageFile) {
+    setEditingId(product.id);
+    setCategoryId(product.categoryId);
+    setName(product.name);
+    setDescription(product.description);
+    setPriceMinor(String(product.priceMinor));
+    setStatus(product.status);
+    setExistingImageUrl(mediaUrl(product.primaryImageUrl));
+    setAttributes([]);
+    selectImage(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+    if (typeof window !== 'undefined') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    try {
+      const detail = await api.get<ProductDetail>(`/products/${product.id}`);
+      setAttributes(
+        detail.attributes.map((row) => ({ name: row.name, value: row.value })),
+      );
+    } catch {
+      /* keep basic fields; attributes stay empty */
+    }
+  }
+
+  async function submit(): Promise<void> {
+    setError(null);
+    if (!isEditing && !imageFile) {
       setError('Product image is required.');
       return;
     }
@@ -171,34 +226,46 @@ export function AdminProducts() {
       .filter((row) => row.name.length > 0 && row.value.length > 0);
     setSubmitting(true);
     try {
-      const body: {
-        categoryId: string;
-        name: string;
-        description: string;
-        priceMinor: number;
-        attributes?: AttributeRow[];
-      } = {
-        categoryId,
-        name,
-        description,
-        priceMinor: Number(priceMinor),
-      };
-      if (cleanedAttributes.length > 0) {
-        body.attributes = cleanedAttributes;
+      if (isEditing && editingId) {
+        await api.patch<Product>(`/admin/products/${editingId}`, {
+          categoryId,
+          name,
+          description,
+          priceMinor: Number(priceMinor),
+          status,
+          attributes: cleanedAttributes,
+        });
+        if (imageFile) {
+          await uploadProductImage(editingId, imageFile);
+        }
+      } else {
+        const body: {
+          categoryId: string;
+          name: string;
+          description: string;
+          priceMinor: number;
+          attributes?: AttributeRow[];
+        } = {
+          categoryId,
+          name,
+          description,
+          priceMinor: Number(priceMinor),
+        };
+        if (cleanedAttributes.length > 0) {
+          body.attributes = cleanedAttributes;
+        }
+        const product = await api.post<Product>('/admin/products', body);
+        await uploadProductImage(product.id, imageFile as File);
       }
-      const product = await api.post<Product>('/admin/products', body);
-      await uploadProductImage(product.id, imageFile);
-      setName('');
-      setDescription('');
-      setPriceMinor('0');
-      setAttributes([]);
-      selectImage(null);
-      if (fileInputRef.current) {
-        fileInputRef.current.value = '';
-      }
+      resetForm();
       await reload();
     } catch (cause) {
-      setError(messageOf(cause, 'Failed to create product'));
+      setError(
+        messageOf(
+          cause,
+          isEditing ? 'Failed to update product' : 'Failed to create product',
+        ),
+      );
     } finally {
       setSubmitting(false);
     }
@@ -208,19 +275,41 @@ export function AdminProducts() {
     setError(null);
     try {
       await api.del<void>(`/admin/products/${id}`);
+      if (editingId === id) {
+        resetForm();
+      }
       await reload();
     } catch (cause) {
       setError(messageOf(cause, 'Failed to archive product'));
     }
   }
 
+  const preview = imagePreview ?? existingImageUrl;
+
   return (
     <section className="flex flex-col gap-6">
-      <div className="flex max-w-3xl flex-col gap-4">
+      <div className="flex max-w-3xl flex-col gap-4 rounded-lg border border-black/10 p-4 dark:border-white/15">
+        <div className="flex items-center justify-between">
+          <h2 className="font-medium">
+            {isEditing ? 'Edit product' : 'New product'}
+          </h2>
+          {isEditing ? (
+            <button
+              type="button"
+              onClick={resetForm}
+              className="inline-flex items-center gap-1.5 rounded-md border border-black/15 px-3 py-1 text-sm hover:bg-black/5 dark:border-white/20 dark:hover:bg-white/10"
+            >
+              <X className="size-4" aria-hidden />
+              Cancel
+            </button>
+          ) : null}
+        </div>
+
         <div className="flex flex-wrap items-end gap-3">
           <select
             value={categoryId}
             onChange={(event) => setCategoryId(event.target.value)}
+            aria-label="Category"
             className="rounded-md border border-black/15 px-3 py-2 dark:border-white/20"
           >
             {categories.map((category) => (
@@ -244,6 +333,22 @@ export function AdminProducts() {
             onChange={(event) => setPriceMinor(event.target.value)}
             className="w-36 rounded-md border border-black/15 px-3 py-2 dark:border-white/20"
           />
+          {isEditing ? (
+            <select
+              value={status}
+              onChange={(event) =>
+                setStatus(event.target.value as ProductStatus)
+              }
+              aria-label="Status"
+              className="rounded-md border border-black/15 px-3 py-2 dark:border-white/20"
+            >
+              {PRODUCT_STATUSES.map((value) => (
+                <option key={value} value={value}>
+                  {value}
+                </option>
+              ))}
+            </select>
+          ) : null}
         </div>
 
         <div className="flex flex-col gap-1">
@@ -304,13 +409,14 @@ export function AdminProducts() {
 
         <div className="flex flex-col gap-2">
           <span className="text-sm text-black/60 dark:text-white/60">
-            Product image <span className="text-red-600">*</span>
+            Product image{' '}
+            {isEditing ? null : <span className="text-red-600">*</span>}
           </span>
           <div className="flex items-center gap-4">
-            {imagePreview ? (
+            {preview ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img
-                src={imagePreview}
+                src={preview}
                 alt="Preview"
                 className="h-20 w-20 rounded-md border border-black/10 object-cover dark:border-white/15"
               />
@@ -325,7 +431,7 @@ export function AdminProducts() {
               className="inline-flex items-center gap-1.5 rounded-md border border-black/15 px-3 py-2 text-sm hover:bg-black/5 dark:border-white/20 dark:hover:bg-white/10"
             >
               <ImagePlus className="size-4" aria-hidden />
-              {imageFile ? 'Change image' : 'Choose image'}
+              {imageFile || isEditing ? 'Change image' : 'Choose image'}
             </button>
             <input
               ref={fileInputRef}
@@ -341,12 +447,22 @@ export function AdminProducts() {
 
         <button
           type="button"
-          onClick={() => void create()}
-          disabled={!imageFile || submitting}
+          onClick={() => void submit()}
+          disabled={(!isEditing && !imageFile) || submitting}
           className="inline-flex w-fit items-center gap-2 rounded-md bg-foreground px-4 py-2 text-background disabled:cursor-not-allowed disabled:opacity-50"
         >
-          <Plus className="size-4" aria-hidden />
-          {submitting ? 'Creating…' : 'Create'}
+          {isEditing ? (
+            <Save className="size-4" aria-hidden />
+          ) : (
+            <Plus className="size-4" aria-hidden />
+          )}
+          {submitting
+            ? isEditing
+              ? 'Saving…'
+              : 'Creating…'
+            : isEditing
+              ? 'Save'
+              : 'Create'}
         </button>
       </div>
 
@@ -365,19 +481,32 @@ export function AdminProducts() {
         </thead>
         <tbody className="divide-y divide-black/10 dark:divide-white/15">
           {products.map((product) => (
-            <tr key={product.id}>
+            <tr
+              key={product.id}
+              className={editingId === product.id ? 'bg-black/5 dark:bg-white/10' : ''}
+            >
               <td className="py-2">{product.name}</td>
               <td>{formatMinor(product.priceMinor)}</td>
               <td>{product.status}</td>
               <td className="text-right">
-                <button
-                  type="button"
-                  onClick={() => void archive(product.id)}
-                  className="inline-flex items-center gap-1.5 rounded-md border border-black/15 px-3 py-1 hover:bg-black/5 dark:border-white/20 dark:hover:bg-white/10"
-                >
-                  <Archive className="size-4" aria-hidden />
-                  Archive
-                </button>
+                <div className="flex justify-end gap-2">
+                  <button
+                    type="button"
+                    onClick={() => void startEdit(product)}
+                    className="inline-flex items-center gap-1.5 rounded-md border border-black/15 px-3 py-1 hover:bg-black/5 dark:border-white/20 dark:hover:bg-white/10"
+                  >
+                    <Pencil className="size-4" aria-hidden />
+                    Edit
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => void archive(product.id)}
+                    className="inline-flex items-center gap-1.5 rounded-md border border-black/15 px-3 py-1 hover:bg-black/5 dark:border-white/20 dark:hover:bg-white/10"
+                  >
+                    <Archive className="size-4" aria-hidden />
+                    Archive
+                  </button>
+                </div>
               </td>
             </tr>
           ))}
